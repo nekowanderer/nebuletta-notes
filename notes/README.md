@@ -9,6 +9,8 @@ Technical concepts, fundamentals, and theoretical knowledge
 
 - **Terraform Knowledge**
 - **AWS Networking Concepts**  
+- **AWS Resources Related Concepts**
+- **Computer Science/Software Engineering Related Topics**
 
 ### [🔧 Troubleshooting](troubleshooting/README.md)
 Real-world debugging experiences and practical problem-solving guides
