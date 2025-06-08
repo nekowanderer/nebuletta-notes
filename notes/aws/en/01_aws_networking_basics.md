@@ -1,6 +1,6 @@
 # AWS Networking Basics
 
-[English](./09_aws_networking_basics.md) | [繁體中文](../zh-tw/09_aws_networking_basics.md) | [日本語](../ja/09_aws_networking_basics.md) | [Back to Index](../README.md)
+[English](./01_aws_networking_basics.md) | [繁體中文](../zh-tw/01_aws_networking_basics.md) | [日本語](../ja/01_aws_networking_basics.md) | [Back to Index](../README.md)
 
 ## Basic Service Analogies
 - **ELB (Elastic Load Balancer)**: Like a greeter at the entrance, directing customers to available staff

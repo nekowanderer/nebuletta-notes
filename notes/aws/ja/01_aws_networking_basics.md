@@ -1,6 +1,6 @@
 # AWS ネットワークの基礎
 
-[English](../en/09_aws_networking_basics.md) | [繁體中文](../zh-tw/09_aws_networking_basics.md) | [日本語](./09_aws_networking_basics.md) | [インデックスに戻る](../README.md)
+[English](../en/01_aws_networking_basics.md) | [繁體中文](../zh-tw/01_aws_networking_basics.md) | [日本語](./01_aws_networking_basics.md) | [インデックスに戻る](../README.md)
 
 ## 基本サービスの例え
 - **ELB (Elastic Load Balancer)**: 入口の案内係のように、利用可能なスタッフに顧客を振り分けます

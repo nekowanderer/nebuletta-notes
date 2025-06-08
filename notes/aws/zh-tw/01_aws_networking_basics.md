@@ -1,6 +1,6 @@
 # AWS 網路基礎概念
 
-[English](../en/09_aws_networking_basics.md) | [繁體中文](./09_aws_networking_basics.md) | [日本語](../ja/09_aws_networking_basics.md) | [回到索引](../README.md)
+[English](../en/01_aws_networking_basics.md) | [繁體中文](./01_aws_networking_basics.md) | [日本語](../ja/01_aws_networking_basics.md) | [回到索引](../README.md)
 
 ## 基本服務類比
 - **ELB (Elastic Load Balancer)**: 門口的迎賓員，負責將流量分配到有容量的伺服器

@@ -1,6 +1,6 @@
 # 從 AWS SES 實務談 Email 附件 Base64 編碼與容量計算
 
-[English](../en/08_aws-ses-attachment-base64-sizing.md) | [繁體中文](./08_aws-ses-attachment-base64-sizing.md) | [日本語](../ja/08_aws-ses-attachment-base64-sizing.md) | [回到索引](../README.md)
+[English](../en/07_aws-ses-attachment-base64-sizing.md) | [繁體中文](./07_aws-ses-attachment-base64-sizing.md) | [日本語](../ja/07_aws-ses-attachment-base64-sizing.md) | [回到索引](../README.md)
 
 ## 背景
 某天在公司的 design review meeting 裡，提到一些跟 AWS SES 有關的設定，其中，在上傳附加檔案的時候，如果是透過 AWS SDK 來處理的話，我們可以省去將附加檔案編碼為 base64-encoding 格式的過程，因為 AWS SDK 會自動處理這段。

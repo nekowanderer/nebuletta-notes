@@ -12,17 +12,16 @@ The implementation is maintained in a separate repository, [click here for the i
 
 ```
 nebuletta-notes/
-├── docs/                    # Documentation
-│   ├── concepts/            # Concept documentation
+├── notes/                   
+│   ├── aws/                 # Notes for AWS related topics
+│   ├── iac/                 # Notes for Infrastrucuture as Code  
+│   ├── containerization/    # Notes for containerization (TBC)
+│   ├── ai/                  # Notes for AI related topics (TBC)
 │   └── troubleshooting/     # Experimentation and debugging notes
 └── terraform/               # Terraform related files
     └── modules/             # Reusable Terraform modules
         ├── compute/         # Compute related modules
         ├── networking/      # Networking related modules
-        └── storage/         # Storage related modules
+        ├── .../             # Other modules
+        └── state-storage/   # State storage related modules
 ```
-
-## Documentation
-
-- `docs/concepts/`: Contains concept documentation
-- `docs/troubleshooting/`: Contains experimentation and debugging notes

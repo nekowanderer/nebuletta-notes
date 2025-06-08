@@ -1,0 +1,30 @@
+# AWS Notes
+
+← [Back to Nebuletta Notes](../README.md)
+
+- [English](en/)
+  - [01. AWS Networking Basics](en/01_aws_networking_basics.md)
+  - [02. Route 53 vs Global Accelerator: Properties and Differences](en/02_route53_vs_global_accelerator.md)
+  - [03. Network ACL (Stateless) vs Security Group (Stateful) Deep Analysis](en/03_network_acl_stateless_vs_security_group_stateful.md)
+  - [04. AWS Route Table Design Discussion](en/04_aws_route_table_design.md)
+  - [05. ECS, Fargate, Lambda, EKS Comparison and Sidecar Design Explanation](en/05_aws_ecs_fargate_comparison.md)
+  - [06. AWS Policy Design in Practice: Understanding S3 and SQS Permission Management](en/06_aws_policy_design_in_practice.md)
+  - [07. Practical Guide to Email Attachment Base64 Encoding and Size Calculation in AWS SES](en/07_aws-ses-attachment-base64-sizing.md)
+  
+- [繁體中文](zh-tw/)
+  - [01. AWS 網路基礎概念](zh-tw/01_aws_networking_basics.md)
+  - [02. Route 53 與 Global Accelerator 的性質與差異比較](zh-tw/02_route53_vs_global_accelerator.md)
+  - [03. Network ACL (Stateless) vs Security Group (Stateful) 深度解析](zh-tw/03_network_acl_stateless_vs_security_group_stateful.md)
+  - [04. AWS Route Table 設計討論](zh-tw/04_aws_route_table_design.md)
+  - [05. ECS、Fargate、Lambda、EKS 比較與 Sidecar 設計說明](zh-tw/05_aws_ecs_fargate_comparison.md)
+  - [06. AWS Policy 設計實務：S3、SQS 權限控管方式解析](zh-tw/06_aws_policy_design_in_practice.md)
+  - [07. 從 AWS SES 實務談 Email 附件 Base64 編碼與容量計算](zh-tw/07_aws-ses-attachment-base64-sizing.md)
+  
+- [日本語](ja/)
+  - [01. AWS ネットワークの基礎](ja/01_aws_networking_basics.md)
+  - [02. Route 53 と Global Accelerator の性質と違いの比較](ja/02_route53_vs_global_accelerator.md)
+  - [03. Network ACL（ステートレス）vs Security Group（ステートフル）深掘り解析](ja/03_network_acl_stateless_vs_security_group_stateful.md)
+  - [04. AWS ルートテーブル設計の議論](ja/04_aws_route_table_design.md)
+  - [05. ECS、Fargate、Lambda、EKS の比較と Sidecar 設計の説明](ja/05_aws_ecs_fargate_comparison.md)
+  - [06. AWS ポリシー設計の実践：S3とSQSの権限管理方法の解説](ja/06_aws_policy_design_in_practice.md)
+  - [07. AWS SES 実務から見るメール添付ファイルのBase64エンコーディングと容量計算](ja/07_aws-ses-attachment-base64-sizing.md)

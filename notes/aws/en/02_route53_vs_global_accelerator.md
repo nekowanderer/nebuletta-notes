@@ -1,6 +1,6 @@
 # Route 53 vs Global Accelerator: Properties and Differences
 
-[English](07_route53_vs_global_accelerator.md) | [繁體中文](../zh-tw/07_route53_vs_global_accelerator.md) | [日本語](../ja/07_route53_vs_global_accelerator.md) | [Back to Index](../README.md)
+[English](02_route53_vs_global_accelerator.md) | [繁體中文](../zh-tw/02_route53_vs_global_accelerator.md) | [日本語](../ja/02_route53_vs_global_accelerator.md) | [Back to Index](../README.md)
 
 
 ## Background
