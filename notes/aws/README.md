@@ -13,6 +13,7 @@
   - [08. AWS Storage Services Comparison](en/08_aws_ebs_efs_s3.md)
   - [09. AWS Database Services Comparison: RDS vs Aurora](en/09_aws_database.md)
   - [10. AWS Redshift v.s. AWS Athena](en/10_aws_redshift_athena.md)
+  - [11. Real-time Data Query Practice with Apache Kafka, Apache Hudi, and AWS Athena](en/11_analysis_pipeline_for_athena_practice.md)
   
 - [繁體中文](zh-tw/)
   - [01. AWS 網路基礎概念](zh-tw/01_aws_networking_basics.md)
@@ -25,6 +26,7 @@
   - [08. AWS 儲存服務比較](zh-tw/08_aws_ebs_efs_s3.md)
   - [09. AWS 資料庫服務比較：RDS vs Aurora](zh-tw/09_aws_database.md)
   - [10. AWS Redshift v.s. AWS Athena](zh-tw/10_aws_redshift_athena.md)
+  - [11. 串接 Apache Kafka、Apache Hudi 與 AWS Athena 的即時資料查詢實務](zh-tw/11_analysis_pipeline_for_athena_practice.md)
   
 - [日本語](ja/)
   - [01. AWS ネットワークの基礎](ja/01_aws_networking_basics.md)
@@ -37,3 +39,4 @@
   - [08. AWS ストレージサービスの比較](ja/08_aws_ebs_efs_s3.md)
   - [09. AWS データベースサービスの比較：RDS vs Aurora](ja/09_aws_database.md)
   - [10. AWS Redshift と AWS Athena の比較](ja/10_aws_redshift_athena.md)
+  - [11. Apache Kafka、Apache Hudi、AWS Athena を使用したリアルタイムデータクエリの実践](ja/11_analysis_pipeline_for_athena_practice.md)
