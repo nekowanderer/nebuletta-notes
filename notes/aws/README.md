@@ -9,7 +9,7 @@
   - [04. AWS Route Table Design Discussion](en/04_aws_route_table_design.md)
   - [05. ECS, Fargate, Lambda, EKS Comparison and Sidecar Design Explanation](en/05_aws_ecs_fargate_comparison.md)
   - [06. AWS Policy Design in Practice: Understanding S3 and SQS Permission Management](en/06_aws_policy_design_in_practice.md)
-  - [07. Practical Guide to Email Attachment Base64 Encoding and Size Calculation in AWS SES](en/07_aws-ses-attachment-base64-sizing.md)
+  - [07. Practical Guide to Email Attachment Base64 Encoding and Size Calculation in AWS SES](en/07_aws_ses_attachment_base64_sizing.md)
   - [08. AWS Storage Services Comparison](en/08_aws_ebs_efs_s3.md)
   
 - [繁體中文](zh-tw/)
@@ -19,7 +19,7 @@
   - [04. AWS Route Table 設計討論](zh-tw/04_aws_route_table_design.md)
   - [05. ECS、Fargate、Lambda、EKS 比較與 Sidecar 設計說明](zh-tw/05_aws_ecs_fargate_comparison.md)
   - [06. AWS Policy 設計實務：S3、SQS 權限控管方式解析](zh-tw/06_aws_policy_design_in_practice.md)
-  - [07. 從 AWS SES 實務談 Email 附件 Base64 編碼與容量計算](zh-tw/07_aws-ses-attachment-base64-sizing.md)
+  - [07. 從 AWS SES 實務談 Email 附件 Base64 編碼與容量計算](zh-tw/07_aws_ses_attachment_base64_sizing.md)
   - [08. AWS 儲存服務比較](zh-tw/08_aws_ebs_efs_s3.md)
   
 - [日本語](ja/)
@@ -29,5 +29,5 @@
   - [04. AWS ルートテーブル設計の議論](ja/04_aws_route_table_design.md)
   - [05. ECS、Fargate、Lambda、EKS の比較と Sidecar 設計の説明](ja/05_aws_ecs_fargate_comparison.md)
   - [06. AWS ポリシー設計の実践：S3とSQSの権限管理方法の解説](ja/06_aws_policy_design_in_practice.md)
-  - [07. AWS SES 実務から見るメール添付ファイルのBase64エンコーディングと容量計算](ja/07_aws-ses-attachment-base64-sizing.md)
+  - [07. AWS SES 実務から見るメール添付ファイルのBase64エンコーディングと容量計算](ja/07_aws_ses_attachment_base64_sizing.md)
   - [08. AWS ストレージサービスの比較](ja/08_aws_ebs_efs_s3.md)

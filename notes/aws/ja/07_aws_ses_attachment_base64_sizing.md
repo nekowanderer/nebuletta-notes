@@ -1,6 +1,6 @@
 # AWS SES 実務から見るメール添付ファイルのBase64エンコーディングと容量計算
 
-[English](../en/07_aws-ses-attachment-base64-sizing.md) | [繁體中文](../zh-tw/07_aws-ses-attachment-base64-sizing.md) | [日本語](07_aws-ses-attachment-base64-sizing.md) | [インデックスに戻る](../README.md) 
+[English](../en/07_aws_ses_attachment_base64_sizing.md) | [繁體中文](../zh-tw/07_aws_ses_attachment_base64_sizing.md) | [日本語](07_aws_ses_attachment_base64_sizing.md) | [インデックスに戻る](../README.md) 
 
 ## 背景
 会社のデザインレビュー会議でAWS SESの設定について議論した際、AWS SDKを使用して添付ファイルをアップロードする場合、Base64エンコーディングのプロセスを省略できることが話題になりました。これはAWS SDKが自動的に処理してくれるためです。

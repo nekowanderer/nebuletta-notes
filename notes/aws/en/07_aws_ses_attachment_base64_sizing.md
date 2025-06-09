@@ -1,6 +1,6 @@
 # Practical Guide to Email Attachment Base64 Encoding and Size Calculation in AWS SES
 
-[English](07_aws-ses-attachment-base64-sizing.md) | [繁體中文](../zh-tw/07_aws-ses-attachment-base64-sizing.md) | [日本語](../ja/07_aws-ses-attachment-base64-sizing.md) | [Back to Index](../README.md) 
+[English](07_aws_ses_attachment_base64_sizing.md) | [繁體中文](../zh-tw/07_aws_ses_attachment_base64_sizing.md) | [日本語](../ja/07_aws_ses_attachment_base64_sizing.md) | [Back to Index](../README.md) 
 
 ## Background
 During a company design review meeting discussing AWS SES settings, it was mentioned that when uploading attachments through the AWS SDK, we can skip the process of encoding attachments to base64 format as the AWS SDK handles this automatically.
