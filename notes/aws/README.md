@@ -12,6 +12,7 @@
   - [07. Practical Guide to Email Attachment Base64 Encoding and Size Calculation in AWS SES](en/07_aws_ses_attachment_base64_sizing.md)
   - [08. AWS Storage Services Comparison](en/08_aws_ebs_efs_s3.md)
   - [09. AWS Database Services Comparison: RDS vs Aurora](en/09_aws_database.md)
+  - [10. AWS Redshift v.s. AWS Athena](en/10_aws_redshift_athena.md)
   
 - [繁體中文](zh-tw/)
   - [01. AWS 網路基礎概念](zh-tw/01_aws_networking_basics.md)
@@ -22,7 +23,8 @@
   - [06. AWS Policy 設計實務：S3、SQS 權限控管方式解析](zh-tw/06_aws_policy_design_in_practice.md)
   - [07. 從 AWS SES 實務談 Email 附件 Base64 編碼與容量計算](zh-tw/07_aws_ses_attachment_base64_sizing.md)
   - [08. AWS 儲存服務比較](zh-tw/08_aws_ebs_efs_s3.md)
-  - [09. AWS 資料庫服務比較：RDS vs Aurora](en/09_aws_database.md)
+  - [09. AWS 資料庫服務比較：RDS vs Aurora](zh-tw/09_aws_database.md)
+  - [10. AWS Redshift v.s. AWS Athena](zh-tw/10_aws_redshift_athena.md)
   
 - [日本語](ja/)
   - [01. AWS ネットワークの基礎](ja/01_aws_networking_basics.md)
@@ -33,4 +35,5 @@
   - [06. AWS ポリシー設計の実践：S3とSQSの権限管理方法の解説](ja/06_aws_policy_design_in_practice.md)
   - [07. AWS SES 実務から見るメール添付ファイルのBase64エンコーディングと容量計算](ja/07_aws_ses_attachment_base64_sizing.md)
   - [08. AWS ストレージサービスの比較](ja/08_aws_ebs_efs_s3.md)
-  - [09. AWS データベースサービスの比較：RDS vs Aurora](en/09_aws_database.md)
+  - [09. AWS データベースサービスの比較：RDS vs Aurora](ja/09_aws_database.md)
+  - [10. AWS Redshift と AWS Athena の比較](ja/10_aws_redshift_athena.md)
