@@ -13,18 +13,15 @@ Step 3. 將該中文翻譯為自然流暢、語意完整的英文（美式書面
 
 Step 4. 將英文翻譯為地道的日本語（ビジネス日本語をベースにして）
 
-Step 5. 若中文版本有撰寫連結至英文/日文版本以及回到索引的連結的話，其他語言版本也比照辦理，譬如，中文版的索引列範本如下：
-
-<!-- Example of the index row -->
-[English](../en/01_about_kubernetes.md) | [繁體中文](../zh-tw/01_about_kubernetes.md) | [日本語](../ja/01_about_kubernetes.md) | [回到索引](../README.md)
-
-要注意的是，索引連結 (index row) 請放在檔案文件標題的下方，譬如：
+Step 5. 若中文版本有撰寫連結至英文/日文版本以及回到索引的連結的話，其他語言版本也比照辦理，譬如，中文版的索引列模板如下：
 
 <!-- Start of the file -->
 # This is the title of the document
 <!-- 空一行，然後才寫 index row-->
 [English](../en/01_about_kubernetes.md) | [繁體中文](../zh-tw/01_about_kubernetes.md) | [日本語](../ja/01_about_kubernetes.md) | [回到索引](../README.md)
 <!-- content of the document -->
+
+若你發現中文版的文件沒有加上索引連結，請根據以上模板幫忙補上
 
 英文版的模板如下：
 <!-- Start of the file -->

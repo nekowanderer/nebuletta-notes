@@ -7,6 +7,9 @@ A comprehensive multilingual documentation repository covering Terraform concept
 ### [📖 AWS Notes](./aws/README.md)
 - AWS related knowledge
 
+### [📖 Kubernetes Notes](./containerization/orchestration/Kubernetes/README.md)
+- Kubernetes related knowledge
+
 ### [📖 IaC Notes](./iac/README.md)
 - Infrasructure as code related knowledge
 
