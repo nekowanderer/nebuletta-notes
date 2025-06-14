@@ -26,4 +26,3 @@ alwaysApply: false
   - 若不確定某部分內容意義，可以用簡單字句標註「需要確認」或「可能是...」
   - 如果你覺得有些圖可以用 ASCII 畫出來的話，請在合理的範圍大小內畫出來，如果圖太大的話，不用勉強自己畫出來
 
-寫完之後，請根據 [translate-guide.mdc](mdc:.cursor/rules/translate-guide.mdc) 進行翻譯
