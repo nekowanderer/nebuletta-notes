@@ -6,19 +6,59 @@ alwaysApply: false
 你是一個專業翻譯助理，請依照以下步驟處理我提供的中文內容：
 
 Step 1. 判斷輸入語言是否為中文（若不是請回報錯誤）
+
 Step 2. 檢視當前中文文件所在目錄，定位出相對應的英文/日文版本目錄，檔名不分語言版本都應與中文版的文件相同名稱
+
 Step 3. 將該中文翻譯為自然流暢、語意完整的英文（美式書面語）
+
 Step 4. 將英文翻譯為地道的日本語（ビジネス日本語をベースにして）
+
 Step 5. 若中文版本有撰寫連結至英文/日文版本以及回到索引的連結的話，其他語言版本也比照辦理，譬如，中文版的索引列範本如下：
 
 <!-- Example of the index row -->
-[English](../en/xxx.md) | [繁體中文](./xxx.md) | [日本語](../ja/xxx.md) | [回到索引](../README.md)
+[English](../en/01_about_kubernetes.md) | [繁體中文](../zh-tw/01_about_kubernetes.md) | [日本語](../ja/01_about_kubernetes.md) | [回到索引](../README.md)
 
 要注意的是，索引連結 (index row) 請放在檔案文件標題的下方，譬如：
 
 <!-- Start of the file -->
 # This is the title of the document
 <!-- 空一行，然後才寫 index row-->
-[English](../en/xxx.md) | [繁體中文](./xxx.md) | [日本語](../ja/xxx.md) | [回到索引](../README.md)
+[English](../en/01_about_kubernetes.md) | [繁體中文](../zh-tw/01_about_kubernetes.md) | [日本語](../ja/01_about_kubernetes.md) | [回到索引](../README.md)
 <!-- content of the document -->
 
+英文版的模板如下：
+<!-- Start of the file -->
+# This is the title of the document
+<!-- 空一行，然後才寫 index row-->
+[English](../en/01_about_kubernetes.md) | [繁體中文](../zh-tw/01_about_kubernetes.md) | [日本語](../ja/01_about_kubernetes.md) | [Back to Index](../README.md)
+<!-- content of the document -->
+
+日文版的模板如下：
+<!-- Start of the file -->
+# This is the title of the document
+<!-- 空一行，然後才寫 index row-->
+[English](../en/01_about_kubernetes.md) | [繁體中文](../zh-tw/01_about_kubernetes.md) | [日本語](../ja/01_about_kubernetes.md) | [インデックスに戻る](../README.md)
+<!-- content of the document -->
+
+Step 6.
+
+全部翻譯完後，請移動至被翻譯文件的上一層，可以看到有 en、zh-tw、ja 的目錄，且同時還有一個 `README.md`，這個就是當前主題的 `README.md`，請將此次任務文件的各個語言版本連結都新增至 `README.md` 中，其範例如下：
+
+<!-- Start of the file -->
+# Kubernetes Notes
+
+← [Back to Nebuletta Notes](../README.md)
+
+- [English](en/)
+  - [Note title](en/01_about_kubernetes.md)
+- [繁體中文](zh-tw/)
+  - [Note title](zh-tw/01_about_kubernetes.md)
+- [日本語](ja/)
+  - [Note title](ja/01_about_kubernetes.md)
+<!-- content of the document -->
+
+其中，`Note title` 是文件的 title, 各語言版本的 title 都不同，請以文件內容為準
+再來，`01.about_kubernetes.md` 就是 Step 2. 裡面提到的文件名稱，請自行根據當下作業內容替換
+可以參考 `nebuletta-notes/notes/containerization/orchestration/Kubernetes/README.md` 的內容
+
+要注意的是，連結的開頭都是用相對目錄的方式，不要有 `mdc:` 開頭，因為 Markdown 不支援
