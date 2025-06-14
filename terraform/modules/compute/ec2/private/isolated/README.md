@@ -48,7 +48,7 @@ This module creates an EC2 instance in a private subnet that can connect to exte
 
 This module configures the EC2 instance to allow secure connection through AWS Systems Manager Session Manager:
 
-1. Attaches AmazonSSMManagedInstanceCore policy to EC2 role
+1. Attaches `AmazonSSMManagedInstanceCore` policy to EC2 role
 2. No ingress rules required at security group level for Session Manager (as it uses VPC Endpoints)
 3. Can connect to instance directly from AWS Console using Session Manager
 

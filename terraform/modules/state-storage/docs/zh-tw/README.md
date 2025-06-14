@@ -56,4 +56,4 @@ terraform destroy -var-file="common.tfvars"
 1. 此模組創建的資源僅用於 Terraform 狀態存儲
 2. 確保使用正確的 AWS 設定檔
 3. 在開發環境中建議不要設置 `prevent_destroy`
-4. [更多詳情請參考此處](../../notes/about_terraform_state.md) 
+4. Remote state storage 本身的 tfstate 通常是不會放S3的，他要做的就只是在 AWS 上面開一個空的 bucket 還有一張 DynamoDB table 當作 lock 而已

@@ -56,4 +56,4 @@ terraform destroy -var-file="common.tfvars"
 1. このモジュールによって作成されるリソースは Terraform 状態ストレージのみを目的としています
 2. 正しい AWS プロファイルを使用していることを確認してください
 3. 開発環境では `prevent_destroy` を設定しないことをお勧めします
-4. [詳細はこちらを参照してください](../../notes/about_terraform_state.md) 
+4. リモートステートストレージ自体のtfstateは通常S3に保存されません。その目的は単にAWSで空のバケットとロック用のDynamoDBテーブルを作成することだけです 
