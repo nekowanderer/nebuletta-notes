@@ -114,6 +114,12 @@ Address: 2404:6800:4004:827::200e
      icmp_code  = -1
    }
    ```
+   - 這個設定在 Terraform 裡面要注意撰寫的方式，譬如，如下方式是錯誤的：
+     - <image src=../images/01_wrong_config_for_icmp.jpg />
+   - 應該要這樣寫：
+     - <image src=../images/01_correct_config_for_icmp.jpg />
+   - 長出來就是這樣：
+     - <image src=../images/01_icmp_acls_rule_result.jpg />
 
 2. **允許 Ephemeral Port 回應流量**：
    ```hcl
