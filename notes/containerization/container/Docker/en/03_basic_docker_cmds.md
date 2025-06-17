@@ -99,3 +99,75 @@ $ docker push your_docker_hub_account/myimage
 ```
 
 After completion, you can view the uploaded image on [Docker Hub](https://hub.docker.com/) 
+
+## Docker Volume Operations
+1. Create and List Volumes:
+```bash
+# List all volumes
+$ docker volume ls
+
+# Create a new volume
+$ docker volume create v001
+
+# List volumes again to confirm
+$ docker volume ls
+
+# Inspect volume details
+$ docker volume inspect v001
+```
+
+2. Mount Volume to Container:
+```bash
+# Start container with volume mounted to /var/www/localhost/htdocs/ directory
+$ docker run -d -p 8081:80 --name c001 -v v001:/var/www/localhost/htdocs/ myimage 
+```
+
+3. Operate on Volume Inside Container:
+```bash
+# Enter the container
+$ docker exec -it c001 /bin/sh
+
+# Change to mounted directory
+$ cd /var/www/localhost/htdocs/
+
+# List directory contents
+$ ls
+
+# View index.html content
+$ cat index.html
+
+# Modify index.html content
+$ echo "<h2>learning docker now!</h2>" >> index.html
+
+# Verify changes
+$ cat index.html
+
+# Exit container
+$ exit
+```
+You can check the results in your browser
+
+4. Test Volume Persistence:
+```bash
+# Stop and remove container
+$ docker container stop c001
+$ docker container rm c001
+
+# Restart container with the same volume
+$ docker run -d -p 8081:80 --name c001 -v v001:/var/www/localhost/htdocs/ myimage 
+$ docker ps
+```
+You can see the data still exists in the browser
+
+5. Clean Up Resources:
+```bash
+# Stop and remove container
+$ docker container stop c001
+$ docker container rm c001
+
+# Remove volume
+$ docker volume rm v001
+
+# Verify volume has been removed
+$ docker volume ls
+``` 

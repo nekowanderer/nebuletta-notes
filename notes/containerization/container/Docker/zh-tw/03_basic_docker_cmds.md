@@ -99,3 +99,76 @@ $ docker push your_docker_hub_account/myimage
 ```
 
 完成後可以在 [Docker Hub](https://hub.docker.com/) 查看上傳的映像檔
+
+## Docker Volume 操作
+1. 建立並查看 Volume：
+```bash
+# 列出所有 volumes
+$ docker volume ls
+
+# 建立新的 volume
+$ docker volume create v001
+
+# 再次列出 volumes 確認
+$ docker volume ls
+
+# 查看 volume 詳細資訊
+$ docker volume inspect v001
+```
+
+2. 使用 Volume 掛載到容器：
+```bash
+# 使用 volume 啟動容器，將 v001 掛載到容器的 /var/www/localhost/htdocs/ 目錄
+$ docker run -d -p 8081:80 --name c001 -v v001:/var/www/localhost/htdocs/ myimage 
+```
+
+3. 在容器中操作 Volume：
+```bash
+# 進入容器
+$ docker exec -it c001 /bin/sh
+
+# 切換到掛載目錄
+$ cd /var/www/localhost/htdocs/
+
+# 查看目錄內容
+$ ls
+
+# 查看 index.html 內容
+$ cat index.html
+
+# 修改 index.html 內容
+$ echo "<h2>learning docker now!</h2>" >> index.html
+
+# 確認修改結果
+$ cat index.html
+
+# 離開容器
+$ exit
+```
+完成後可以在瀏覽器查看結果
+
+4. 測試 Volume 的持久性：
+```bash
+# 停止並移除容器
+$ docker container stop c001
+$ docker container rm c001
+
+# 使用相同的 volume 重新啟動容器
+$ docker run -d -p 8081:80 --name c001 -v v001:/var/www/localhost/htdocs/ myimage 
+$ docker ps
+```
+在瀏覽器中可以看到資料仍然存在
+
+5. 清理資源：
+```bash
+# 停止並移除容器
+$ docker container stop c001
+$ docker container rm c001
+
+# 移除 volume
+$ docker volume rm v001
+
+# 確認 volume 已被移除
+$ docker volume ls
+```
+
