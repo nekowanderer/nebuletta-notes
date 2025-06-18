@@ -2,7 +2,6 @@
 
 [English](../en/04_about_taint.md) | [繁體中文](../zh-tw/04_about_taint.md) | [日本語](../ja/04_about_taint.md) | [回到索引](../README.md)
 
-
 ---
 
 ## 1. Master Node 可以有 Pod 嗎？
