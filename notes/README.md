@@ -22,6 +22,6 @@ A comprehensive multilingual documentation repository covering Terraform concept
 ## 🌐 Language Support
 
 - All documentation is available in multiple languages:
-  - **🇺🇸 English** (`en/`) - International standard
-  - **🇹🇼 繁體中文** (`zh-tw/`) - Traditional Chinese
-  - **🇯🇵 日本語** (`ja/`) - Japanese
+  - **🇺🇸 English** (`en`) - International standard
+  - **🇹🇼 繁體中文** (`zh-tw`) - Traditional Chinese
+  - **🇯🇵 日本語** (`ja`) - Japanese
