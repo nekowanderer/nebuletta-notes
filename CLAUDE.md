@@ -76,5 +76,6 @@ Step 6.
 其中，`Note title` 是文件的 title, 各語言版本的 title 都不同，請以文件內容為準
 再來，`01.about_kubernetes.md` 就是 Step 2. 裡面提到的文件名稱，請自行根據當下作業內容替換
 可以參考 `nebuletta-notes/notes/containerization/orchestration/Kubernetes/README.md` 的內容
+以上的 template 內容都是簡化後的示意，實際是請直接參考之前寫過的文件，看實際的值長怎樣
 
 要注意的是，連結的開頭都是用相對目錄的方式，不要有 `mdc:` 開頭，因為 Markdown 不支援
