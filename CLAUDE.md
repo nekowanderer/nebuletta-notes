@@ -63,33 +63,16 @@ Step 4. 將英文翻譯為地道的日本語（ビジネス日本語をベース
 
 Step 5. 若中文版本有撰寫連結至英文/日文版本以及回到索引的連結的話，其他語言版本也比照辦理，譬如，中文版的索引列模板如下：
 
-```
-<!-- Start of the file -->
-# This is the title of the document
-<!-- 空一行，然後才寫 index row-->
-@English | @繁體中文 | @日本語 | @回到索引
-<!-- content of the document -->
-```
+中文版索引連結格式：
+[English](../en/檔案名稱.md) | [繁體中文](../zh-tw/檔案名稱.md) | [日本語](../ja/檔案名稱.md) | [回到索引](../README.md)
 
 若你發現中文版的文件沒有加上索引連結，請根據以上模板幫忙補上
 
-英文版的模板如下：
-```md
-<!-- Start of the file -->
-# This is the title of the document
-<!-- 空一行，然後才寫 index row-->
-@English | @繁體中文 | @日本語 | @Back to Index
-<!-- content of the document -->
-```
+英文版索引連結格式：
+[English](../en/檔案名稱.md) | [繁體中文](../zh-tw/檔案名稱.md) | [日本語](../ja/檔案名稱.md) | [Back to Index](../README.md)
 
-日文版的模板如下：
-```md
-<!-- Start of the file -->
-# This is the title of the document
-<!-- 空一行，然後才寫 index row-->
-@English | @繁體中文 | @日本語 | @インデックスに戻る
-<!-- content of the document -->
-```
+日文版索引連結格式：
+[English](../en/檔案名稱.md) | [繁體中文](../zh-tw/檔案名稱.md) | [日本語](../ja/檔案名稱.md) | [インデックスに戻る](../README.md)
 
 Step 6.
 
@@ -110,7 +93,7 @@ Step 6.
 <!-- content of the document -->
 ```
 
-其中，`Note title` 是文件的 title, 各語言版本的 title 都不同，請以文件內容為準
+其中，`@Note title` 是文件的 title, 各語言版本的 title 都不同，請以文件內容為準
 再來，`01.about_kubernetes.md` 就是 Step 2. 裡面提到的文件名稱，請自行根據當下作業內容替換
 可以參考 `nebuletta-notes/notes/containerization/orchestration/Kubernetes/README.md` 的內容
 以上的 template 內容都是簡化後的示意，實際是請直接參考之前寫過的文件，看實際的值長怎樣
