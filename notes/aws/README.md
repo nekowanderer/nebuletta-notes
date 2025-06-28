@@ -16,6 +16,7 @@
   - [11. Real-time Data Query Practice with Apache Kafka, Apache Hudi, and AWS Athena](en/11_analysis_pipeline_for_athena_practice.md)
   - [12. About AWS KMS (Key Management Service)](en/12_aws_kms.md)
   - [13. AWS SES Quick Note](en/13_aws_ses_quick_note.md)
+  - [14. About AWS SES Configuration Set](en/14_aws_ses_configuration_set.md)
   
 - [繁體中文](zh-tw/)
   - [01. AWS 網路基礎概念](zh-tw/01_aws_networking_basics.md)
@@ -31,6 +32,7 @@
   - [11. 串接 Apache Kafka、Apache Hudi 與 AWS Athena 的即時資料查詢實務](zh-tw/11_analysis_pipeline_for_athena_practice.md)
   - [12. 關於 AWS KMS (Key Management Service)](zh-tw/12_aws_kms.md)
   - [13. AWS SES 筆記](zh-tw/13_aws_ses_quick_note.md)
+  - [14. 關於 AWS SES Configuration Set](zh-tw/14_aws_ses_configuration_set.md)
   
 - [日本語](ja/)
   - [01. AWS ネットワークの基礎](ja/01_aws_networking_basics.md)
@@ -46,3 +48,4 @@
   - [11. Apache Kafka、Apache Hudi、AWS Athena を使用したリアルタイムデータクエリの実践](ja/11_analysis_pipeline_for_athena_practice.md)
   - [12. AWS KMS（Key Management Service）について](ja/12_aws_kms.md)
   - [13. AWS SES クイックノート](ja/13_aws_ses_quick_note.md)
+  - [14. AWS SES Configuration Set について](ja/14_aws_ses_configuration_set.md)
