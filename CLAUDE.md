@@ -74,6 +74,14 @@ Step 5. 若中文版本有撰寫連結至英文/日文版本以及回到索引�
 日文版索引連結格式：
 [English](../en/檔案名稱.md) | [繁體中文](../zh-tw/檔案名稱.md) | [日本語](../ja/檔案名稱.md) | [インデックスに戻る](../README.md)
 
+要注意的是，索引連結請放在文件最上方的標題正下方，要空一行，譬如：
+
+```
+# 這個是文件標題
+
+[English](../en/25_k8s_namespace_in_practice.md) | [繁體中文](../zh-tw/25_k8s_namespace_in_practice.md) | [日本語](../ja/25_k8s_namespace_in_practice.md) | [回到索引](../README.md)
+```
+
 Step 6.
 
 全部翻譯完後，請移動至被翻譯文件的上一層，可以看到有 en、zh-tw、ja 的目錄，且同時還有一個 `README.md`，這個就是當前主題的 `README.md`，請將此次任務文件的各個語言版本連結都新增至 `README.md` 中，其範例如下：
