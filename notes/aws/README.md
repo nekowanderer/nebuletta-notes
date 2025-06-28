@@ -15,6 +15,7 @@
   - [10. AWS Redshift v.s. AWS Athena](en/10_aws_redshift_athena.md)
   - [11. Real-time Data Query Practice with Apache Kafka, Apache Hudi, and AWS Athena](en/11_analysis_pipeline_for_athena_practice.md)
   - [12. About AWS KMS (Key Management Service)](en/12_aws_kms.md)
+  - [13. AWS SES Quick Note](en/13_aws_ses_quick_note.md)
   
 - [繁體中文](zh-tw/)
   - [01. AWS 網路基礎概念](zh-tw/01_aws_networking_basics.md)
@@ -29,6 +30,7 @@
   - [10. AWS Redshift v.s. AWS Athena](zh-tw/10_aws_redshift_athena.md)
   - [11. 串接 Apache Kafka、Apache Hudi 與 AWS Athena 的即時資料查詢實務](zh-tw/11_analysis_pipeline_for_athena_practice.md)
   - [12. 關於 AWS KMS (Key Management Service)](zh-tw/12_aws_kms.md)
+  - [13. AWS SES 筆記](zh-tw/13_aws_ses_quick_note.md)
   
 - [日本語](ja/)
   - [01. AWS ネットワークの基礎](ja/01_aws_networking_basics.md)
@@ -43,3 +45,4 @@
   - [10. AWS Redshift と AWS Athena の比較](ja/10_aws_redshift_athena.md)
   - [11. Apache Kafka、Apache Hudi、AWS Athena を使用したリアルタイムデータクエリの実践](ja/11_analysis_pipeline_for_athena_practice.md)
   - [12. AWS KMS（Key Management Service）について](ja/12_aws_kms.md)
+  - [13. AWS SES クイックノート](ja/13_aws_ses_quick_note.md)
