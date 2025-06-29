@@ -40,8 +40,19 @@ Kubernetes Ingress 是一個 API 物件，用來管理叢集內服務的外部�
 - **負載平衡器**：流量的外部進入點
 - **服務**：接收路由流量的後端服務
 
+導入 Ingress 之前（每個服務都有自己的 Load Balancer）：
 ```
-外部使用者 → 負載平衡器 → Ingress Controller → Ingress → 服務 → Pod
+Internet
+    |
+    v
+[Load Balancer A] -> [Service A]
+[Load Balancer B] -> [Service B]
+[Load Balancer C] -> [Service C]
+```
+
+導入 Ingress 之後：
+```
+External User → Load Balancer → Ingress Controller → Ingress → Service → Pod
 ```
 
 ### 單一服務路由與預設後端 (default backend)
@@ -81,6 +92,48 @@ Ingress Controller 的選擇取決於：
 - 基礎設施平台（雲端 vs 地端）
 - 功能需求（SSL 終止、身份驗證等）
 - 效能和成本考量
+
+### Ingress vs Ingress Controller
+
+| 項目 | Ingress Controller（警衛） | Ingress（門禁卡發放規則） | 
+|------|---------------------------|---------------------------|
+| **本質** | Kubernetes 中運行的程式，通常是 Pod/Deployment | Kubernetes 中的一種資源（Resource） | 
+| **功能** | 實際執行 Ingress 規則的組件 | 定義路由規則和策略 |
+| **比喻** | 類似於「警衛」，負責檢查門禁卡並執行規則 | 類似於「門禁卡發放的規則」，說明誰可以進入哪些區域 |
+
+#### 兩者關係
+- **缺一不可**：Ingress Controller 和 Ingress 必須同時存在才能運作
+- **分工明確**：Ingress 定義規則，Controller 執行規則
+- **動態協作**：Controller 會監聽 Ingress 的變更並即時更新 
+
+### 運作流程（以 NGINX Ingress Controller 為例）
+
+#### 1. 啟動時註冊自己是 Ingress Controller
+例如你用 Helm 或 YAML 部署一組 `nginx-ingress-controller` 的 Deployment + Service。
+
+這組 Pod 會自動跟 K8S API Server 登記自己是 Ingress Controller。
+
+#### 2. 持續監聽 Ingress 資源的變動
+Ingress Controller 會不停地 Watch（監聽）K8S 裡所有 Namespace 下的 Ingress 物件（也會監聽相關 Service/Secret）。
+
+每當有人新增、修改、刪除 Ingress，Controller 都會收到通知。
+
+#### 3. 解析 Ingress 規則
+Controller 讀取 Ingress 資源的內容，像是：
+- 要處理哪些 host（域名）
+- 哪些路徑要導到哪個 Service/Port
+- 有沒有要加 SSL/TLS（憑證在哪裡）
+
+#### 4. 自動產生反向代理設定檔
+以 NGINX Controller 為例，它會把 K8S Ingress 內容「轉譯」成自己的 NGINX 設定檔（nginx.conf）。
+
+如果規則有改，Controller 會動態 reload 設定，不需要手動重啟 Pod。
+
+#### 5. 實際接收外部請求並代理進來
+外部 HTTP/HTTPS 流量經過負載平衡器或 NodePort，被導到 Ingress Controller 的 Service。
+
+NGINX 依照剛剛轉譯的規則，把請求導到對應的 K8S Service（再由 Service 送到 Pod）。
+
 
 ### 使用 Ingress 的主要優勢
 
