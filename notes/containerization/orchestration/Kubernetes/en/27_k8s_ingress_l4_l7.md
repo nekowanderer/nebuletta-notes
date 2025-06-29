@@ -1,6 +1,6 @@
 # L4/L7 Network Concepts in Kubernetes Ingress
 
-[English](../en/27_l4_l7.md) | [繁體中文](../zh-tw/27_l4_l7.md) | [日本語](../ja/27_l4_l7.md) | [Back to Index](../README.md)
+[English](../en/27_k8s_ingress_l4_l7.md) | [繁體中文](../zh-tw/27_k8s_ingress_l4_l7.md) | [日本語](../ja/27_k8s_ingress_l4_l7.md) | [Back to Index](../README.md)
 
 ### OSI Network Model Fundamentals
 
@@ -61,7 +61,7 @@ HTTP Request → Ingress Controller → Based on Host/Path → Specific Service 
 - `api.example.com/orders` → Order Service
 - `admin.example.com/*` → Admin Service
 
-### L4 vs L7 Services in Kubernetes
+### Configuration Methods in Kubernetes
 
 **L4 Service (LoadBalancer Service):**
 ```yaml
@@ -98,34 +98,12 @@ spec:
               number: 80
 ```
 
-### Choosing L4 or L7?
-
-**When to Choose L4:**
-- Need maximum performance and lowest latency
-- Handling non-HTTP protocols
-- Simple load distribution requirements
-- No need for content-based routing
-
-**When to Choose L7:**
-- Need routing based on URL paths or hostnames
-- Implementing SSL termination
-- Need application layer health checks
-- Performing request modification or rewriting
-- Implementing microservices architecture API Gateway
-
 ### Practical Application Scenarios Comparison
 
-**L4 Scenario Examples:**
-- Database connection pools (MySQL, PostgreSQL)
-- TCP long connection services
-- Game servers
-- Real-time communication systems
-
-**L7 Scenario Examples:**
-- Web application routing
-- RESTful API service distribution
-- User-based routing (A/B testing)
-- Centralized SSL certificate management
+| Consideration | L4 Load Balancing | L7 Load Balancing |
+|---------------|-------------------|-------------------|
+| **When to Choose** | • Need maximum performance and lowest latency<br>• Handling non-HTTP protocols<br>• Simple load distribution requirements<br>• No need for content-based routing | • Need routing based on URL paths or hostnames<br>• Implementing SSL termination<br>• Need application layer health checks<br>• Performing request modification or rewriting<br>• Implementing microservices architecture API Gateway |
+| **Real-world Scenarios** | • Database connection pools (MySQL, PostgreSQL)<br>• TCP long connection services<br>• Game servers<br>• Real-time communication systems | • Web application routing<br>• RESTful API service distribution<br>• User-based routing (A/B testing)<br>• Centralized SSL certificate management |
 
 ### Performance and Functionality Trade-offs
 
@@ -137,3 +115,13 @@ spec:
 | Protocol Support | All TCP/UDP | Mainly HTTP/HTTPS |
 | Resource Consumption | Low | High |
 | Configuration Complexity | Simple | Complex |
+
+### Plain Language Analogy
+
+| Role | Analogy | Items Checked | Corresponding Ingress Level |
+|------|---------|---------------|----------------------------|
+| Security Gate | Only recognizes "Can this access card open this door" - Checks floor and door number | Card number, door number → Like **IP address + port number** | **L4** |
+| Reception Desk | Further confirms "Which department are you visiting, what's your appointment" - Checks visitor info and purpose | Visiting department, visitor name, appointment notes → Like **HTTP Host, Path, Header** | **L7** |
+
+- L4 Ingress: Like a gate that only checks "Does the card number match this door" - Verifies TCP/UDP + port number and lets through.
+- L7 Ingress: Like a reception desk that not only swipes the card but also checks which floor you're going to, department name, and even requires filling out visitor forms before forwarding.
