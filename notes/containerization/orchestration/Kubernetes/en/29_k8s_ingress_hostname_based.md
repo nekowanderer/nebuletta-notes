@@ -1,4 +1,4 @@
-# Kubernetes Ingress Hostname-based Routing Configuration
+# Kubernetes Ingress Hostname-based Implementation Guide
 
 [English](../en/29_k8s_ingress_hostname_based.md) | [繁體中文](../zh-tw/29_k8s_ingress_hostname_based.md) | [日本語](../ja/29_k8s_ingress_hostname_based.md) | [Back to Index](../README.md)
 

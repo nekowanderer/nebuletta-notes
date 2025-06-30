@@ -1,4 +1,4 @@
-# Kubernetes Ingress 基於主機名的路由配置
+# Kubernetes Ingress Hostname Based 實作指南
 
 [English](../en/29_k8s_ingress_hostname_based.md) | [繁體中文](../zh-tw/29_k8s_ingress_hostname_based.md) | [日本語](../ja/29_k8s_ingress_hostname_based.md) | [回到索引](../README.md)
 

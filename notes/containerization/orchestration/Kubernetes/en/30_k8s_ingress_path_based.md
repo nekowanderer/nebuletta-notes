@@ -1,6 +1,6 @@
-# Kubernetes Path-based Ingress Implementation Guide
+# Kubernetes Ingress Path-based Implementation Guide
 
-[English](../en/30_k8s_path_based.md) | [繁體中文](../zh-tw/30_k8s_path_based.md) | [日本語](../ja/30_k8s_path_based.md) | [Back to Index](../README.md)
+[English](../en/30_k8s_ingress_path_based.md) | [繁體中文](../zh-tw/30_k8s_ingress_path_based.md) | [日本語](../ja/30_k8s_ingress_path_based.md) | [Back to Index](../README.md)
 
 ## Overview
 

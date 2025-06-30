@@ -1,4 +1,4 @@
-# Kubernetes Ingress ホスト名ベースのルーティング設定
+# Kubernetes Ingress Hostname Based 実装ガイド
 
 [English](../en/29_k8s_ingress_hostname_based.md) | [繁體中文](../zh-tw/29_k8s_ingress_hostname_based.md) | [日本語](../ja/29_k8s_ingress_hostname_based.md) | [インデックスに戻る](../README.md)
 
