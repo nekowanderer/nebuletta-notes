@@ -1,4 +1,4 @@
-# Kubernetes HPA (Horizontal Pod Autoscaler) 實作
+# Kubernetes HPA (Horizontal Pod Autoscaling) 實作
 
 [English](../en/33_k8s_hpa_in_practice.md) | [繁體中文](../zh-tw/33_k8s_hpa_in_practice.md) | [日本語](../ja/33_k8s_hpa_in_practice.md) | [回到索引](../README.md)
 
