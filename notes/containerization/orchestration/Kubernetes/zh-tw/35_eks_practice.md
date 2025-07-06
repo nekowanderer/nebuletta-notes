@@ -79,18 +79,155 @@ $ echo ${AWS_ACCOUNT}
 
 ---
 
-## EKS 叢集建立
+## EKS Cluster 建立
+此步驟的細部設定請參考 [EKS 建立設定指南](./36_eks_cluster_setup.md)
 
 ### 建立 Fargate 叢集
 ```bash
-$ eksctl create cluster --name ${CLUSTER_NAME} --version 1.28 --fargate
-$ cat .kube/config
-$ kubectl get all -n kube-system
+$ eksctl create cluster --name ${CLUSTER_NAME} --version 1.33 --fargate
+2025-07-06 05:41:10 [ℹ]  eksctl version 0.210.0
+2025-07-06 05:41:10 [ℹ]  using region ap-northeast-1
+2025-07-06 05:41:11 [ℹ]  setting availability zones to [ap-northeast-1d ap-northeast-1c ap-northeast-1a]
+2025-07-06 05:41:11 [ℹ]  subnets for ap-northeast-1d - public:192.168.0.0/19 private:192.168.96.0/19
+2025-07-06 05:41:11 [ℹ]  subnets for ap-northeast-1c - public:192.168.32.0/19 private:192.168.128.0/19
+2025-07-06 05:41:11 [ℹ]  subnets for ap-northeast-1a - public:192.168.64.0/19 private:192.168.160.0/19
+2025-07-06 05:41:11 [ℹ]  using Kubernetes version 1.33
+2025-07-06 05:41:11 [ℹ]  creating EKS cluster "my-cluster-001" in "ap-northeast-1" region with Fargate profile
+2025-07-06 05:41:11 [ℹ]  if you encounter any issues, check CloudFormation console or try 'eksctl utils describe-stacks --region=ap-northeast-1 --cluster=my-cluster-001'
+2025-07-06 05:41:11 [ℹ]  Kubernetes API endpoint access will use default of {publicAccess=true, privateAccess=false} for cluster "my-cluster-001" in "ap-northeast-1"
+2025-07-06 05:41:11 [ℹ]  CloudWatch logging will not be enabled for cluster "my-cluster-001" in "ap-northeast-1"
+2025-07-06 05:41:11 [ℹ]  you can enable it with 'eksctl utils update-cluster-logging --enable-types={SPECIFY-YOUR-LOG-TYPES-HERE (e.g. all)} --region=ap-northeast-1 --cluster=my-cluster-001'
+2025-07-06 05:41:11 [ℹ]  default addons vpc-cni, kube-proxy, coredns, metrics-server were not specified, will install them as EKS addons
+2025-07-06 05:41:11 [ℹ]
+2 sequential tasks: { create cluster control plane "my-cluster-001",
+    3 sequential sub-tasks: {
+        1 task: { create addons },
+        wait for control plane to become ready,
+        create fargate profiles,
+    }
+}
+2025-07-06 05:41:11 [ℹ]  building cluster stack "eksctl-my-cluster-001-cluster"
+2025-07-06 05:41:11 [ℹ]  deploying stack "eksctl-my-cluster-001-cluster"
+2025-07-06 05:41:41 [ℹ]  waiting for CloudFormation stack "eksctl-my-cluster-001-cluster"
+2025-07-06 05:42:11 [ℹ]  waiting for CloudFormation stack "eksctl-my-cluster-001-cluster"
+2025-07-06 05:43:11 [ℹ]  waiting for CloudFormation stack "eksctl-my-cluster-001-cluster"
+2025-07-06 05:44:11 [ℹ]  waiting for CloudFormation stack "eksctl-my-cluster-001-cluster"
+2025-07-06 05:45:11 [ℹ]  waiting for CloudFormation stack "eksctl-my-cluster-001-cluster"
+2025-07-06 05:46:11 [ℹ]  waiting for CloudFormation stack "eksctl-my-cluster-001-cluster"
+2025-07-06 05:47:11 [ℹ]  waiting for CloudFormation stack "eksctl-my-cluster-001-cluster"
+2025-07-06 05:48:11 [ℹ]  waiting for CloudFormation stack "eksctl-my-cluster-001-cluster"
+2025-07-06 05:49:11 [ℹ]  waiting for CloudFormation stack "eksctl-my-cluster-001-cluster"
+2025-07-06 05:49:12 [!]  recommended policies were found for "vpc-cni" addon, but since OIDC is disabled on the cluster, eksctl cannot configure the requested permissions; the recommended way to provide IAM permissions for "vpc-cni" addon is via pod identity associations; after addon creation is completed, add all recommended policies to the config file, under `addon.PodIdentityAssociations`, and run `eksctl update addon`
+2025-07-06 05:49:12 [ℹ]  creating addon: vpc-cni
+2025-07-06 05:49:13 [ℹ]  successfully created addon: vpc-cni
+2025-07-06 05:49:13 [ℹ]  creating addon: kube-proxy
+2025-07-06 05:49:13 [ℹ]  successfully created addon: kube-proxy
+2025-07-06 05:49:14 [ℹ]  creating addon: coredns
+2025-07-06 05:49:14 [ℹ]  successfully created addon: coredns
+2025-07-06 05:49:15 [ℹ]  creating addon: metrics-server
+2025-07-06 05:49:15 [ℹ]  successfully created addon: metrics-server
+2025-07-06 05:51:15 [ℹ]  creating Fargate profile "fp-default" on EKS cluster "my-cluster-001"
+2025-07-06 05:53:26 [ℹ]  created Fargate profile "fp-default" on EKS cluster "my-cluster-001"
+2025-07-06 05:53:56 [ℹ]  "coredns" is now schedulable onto Fargate
+2025-07-06 05:54:59 [ℹ]  "coredns" is now scheduled onto Fargate
+2025-07-06 05:54:59 [ℹ]  "coredns" pods are now scheduled onto Fargate
+2025-07-06 05:54:59 [ℹ]  waiting for the control plane to become ready
+2025-07-06 05:55:00 [✔]  saved kubeconfig as "/home/ssm-user/.kube/config"
+2025-07-06 05:55:00 [ℹ]  no tasks
+2025-07-06 05:55:00 [✔]  all EKS cluster resources for "my-cluster-001" have been created
+2025-07-06 05:55:03 [ℹ]  kubectl command should work with "/home/ssm-user/.kube/config", try 'kubectl get nodes'
+2025-07-06 05:55:03 [✔]  EKS cluster "my-cluster-001" in "ap-northeast-1" region is ready
 ```
+
+### 檢查安裝結果
+```bash
+$ cat .kube/config
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJQjZKUVNvblViREl3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TlRBM01EWXdOVFF4TVRCYUZ3MHpOVEEzTURRd05UUTJNVEJhTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUURKKzRrZ2YxMHlXVVZINmw0Wmd6Z3NWc3YyV3VKTUNnQ1oyb3YvSjRoNXlmeUVqamlyRXBKdEVZUzQKbW81ZUR1Y0VjRCtqRHEwNDltQ1BNUGlmcHFQZ3JGU2tmMlNtQktFM1B6Y2ZkUWRxRmx3d0VhUnhBTzQ5WEx2eAp1Yk9kYTRFTGdMNnIzNm82YlFXL0FoQXNUYzV2NGJzY2NoeWkvYm5XY0dXNGpJZUJXd2dxb1J4SEpLQlRqN0p5Cm1LV0lFUEdpdXNsUG8yWTlLdEJudlFvMTJxd3RKT01Ma3V1ZUlmR0E1R09PbnVuTy9DS09Ick5LTk1INkpldUgKcXQ2M09YZ3lUVWUvclVQMzJHbTZqZUdnR1RISWpVS3NObHRLVk4zVzlFVjdPa3dVME83MkxpS05NdkdJM2x5QQpUVWN4bWN0WmhCYi9nUU5NYWh6dGRicHBtbDVCQWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJUejFZQlRqc1ZjZkFsYnk5TzBGWEh1OElXdEh6QVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQTFtTWcyNktkUwpiUFdXbXMxdzl6WXdWdFYvSkF3OUFIaTRTaklRYUFOS2FLQUVoWi9ReEFUdWJ3bEZkOWtUK085bk11VmZzb0pLCmJrRTJyc25wZG1tYkxoQnhHeTVoVHUvMlE0Q0JOZHFuWldsRlo5bVNGNUFtZTh3WTNVcHkySmlsZ1JFMkM4eXgKM0F1MCttZU84RDFKSUpESGczZ25BbXBNemFsSVlnSXFHL215QjloZk1vVWZXR3pHRm56UW9mZ3d3OEs3cTkwNgpRUXVHWkxLZThldVJ5S1Y4VWVKUlF4MXhadzlEN1h0OEFycXplcys0dlpiRy96b2Q0ZXJCUGMxQmdLNGp3cXBhCkdpRVFHS2Z6L3B1N0dVWW1GRHZlRTczVTVSNDQ2Y0ROa29QL1QxRGh5N1hnOWpveUJWcVRDaHl4b3BBdk9xc0MKeXgwRENzcTgvYzVOCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    server: https://8B8DC61011BE24084D76FEBB4DDDD9C3.sk1.ap-northeast-1.eks.amazonaws.com
+  name: my-cluster-001.ap-northeast-1.eksctl.io
+contexts:
+- context:
+    cluster: my-cluster-001.ap-northeast-1.eksctl.io
+    user: i-0a4cd97300f5a0107@my-cluster-001.ap-northeast-1.eksctl.io
+  name: i-0a4cd97300f5a0107@my-cluster-001.ap-northeast-1.eksctl.io
+current-context: i-0a4cd97300f5a0107@my-cluster-001.ap-northeast-1.eksctl.io
+kind: Config
+preferences: {}
+users:
+- name: i-0a4cd97300f5a0107@my-cluster-001.ap-northeast-1.eksctl.io
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      args:
+      - eks
+      - get-token
+      - --output
+      - json
+      - --cluster-name
+      - my-cluster-001
+      - --region
+      - ap-northeast-1
+      command: aws
+      env:
+      - name: AWS_STS_REGIONAL_ENDPOINTS
+        value: regional
+      provideClusterInfo: false
+```
+
+### 確認 kube-system namespace 下的各個元件
+```bash
+$ kubectl get all -n kube-system
+NAME                                  READY   STATUS    RESTARTS   AGE
+pod/coredns-5ff77f65d4-jn6d9          1/1     Running   0          2m36s
+pod/coredns-5ff77f65d4-pqwtk          1/1     Running   0          2m36s
+pod/metrics-server-7f76d4758d-db2vs   0/1     Pending   0          5m41s
+pod/metrics-server-7f76d4758d-sst8j   0/1     Pending   0          5m41s
+
+NAME                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                  AGE
+service/eks-extension-metrics-api   ClusterIP   10.100.83.197    <none>        443/TCP                  9m44s
+service/kube-dns                    ClusterIP   10.100.0.10      <none>        53/UDP,53/TCP,9153/TCP   6m12s
+service/metrics-server              ClusterIP   10.100.122.161   <none>        443/TCP                  5m41s
+
+NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+daemonset.apps/aws-node     0         0         0       0            0           <none>          5m43s
+daemonset.apps/kube-proxy   0         0         0       0            0           <none>          5m43s
+
+NAME                             READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/coredns          2/2     2            2           6m12s
+deployment.apps/metrics-server   0/2     2            0           5m41s
+
+NAME                                        DESIRED   CURRENT   READY   AGE
+replicaset.apps/coredns-5c658475b5          0         0         0       6m12s
+replicaset.apps/coredns-5ff77f65d4          2         2         2       2m36s
+replicaset.apps/metrics-server-7f76d4758d   2         2         0       5m41s
+```
+- 這裡最重要的是 coredns，這個元件會協助我們進行 domain name 的相關處理。
 
 ### 建立 OIDC Provider
 ```bash
 $ eksctl utils associate-iam-oidc-provider --cluster ${CLUSTER_NAME} --approve
+2025-07-06 05:56:55 [ℹ]  will create IAM Open ID Connect provider for cluster "my-cluster-001" in "ap-northeast-1"
+2025-07-06 05:56:56 [✔]  created IAM Open ID Connect provider for cluster "my-cluster-001" in "ap-northeast-1"
+```
+
+### 刪除 EKS Cluster 
+後面還有很多相關練習，怕浪費錢的話就先砍掉，要用的時候再建立：
+```bash
+$ eksctl delete cluster --region=ap-northeast-1 --name=my-cluster-001
+2025-07-06 06:00:02 [ℹ]  deleting EKS cluster "my-cluster-001"
+2025-07-06 06:00:03 [ℹ]  deleting Fargate profile "fp-default"
+2025-07-06 06:02:11 [ℹ]  deleted Fargate profile "fp-default"
+2025-07-06 06:02:11 [ℹ]  deleted 1 Fargate profile(s)
+2025-07-06 06:02:11 [✔]  kubeconfig has been updated
+2025-07-06 06:02:11 [ℹ]  cleaning up AWS load balancers created by Kubernetes objects of Kind Service or Ingress
+2025-07-06 06:02:12 [ℹ]
+2 sequential tasks: { delete IAM OIDC provider, delete cluster control plane "my-cluster-001" [async]
+}
+2025-07-06 06:02:13 [ℹ]  will delete stack "eksctl-my-cluster-001-cluster"
+2025-07-06 06:02:13 [✔]  all cluster resources were deleted
 ```
 
 ---
