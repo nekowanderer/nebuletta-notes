@@ -234,24 +234,34 @@ $ eksctl delete cluster --region=ap-northeast-1 --name=my-cluster-001
 
 ## EFS 持久化儲存設定
 
-### 1. 建立 Security Group
+### 建立 Security Group
+<img src="../images/35_create_eks_efs_sg.jpg" width=600 />
+
 - 名稱：`eks-efs-sg`
 - 選擇 EKS 叢集的 VPC
 - 允許全部連線
 
-### 2. 建立 EFS 檔案系統
+### 建立 EFS 檔案系統
+<img src="../images/35_create_efs_1.jpg" width=600 />
+<img src="../images/35_create_efs_2.jpg" width=600 />
+<img src="../images/35_create_efs_3.jpg" width=600 />
+
 - 名稱：`eks-efs`
 - 選擇 EKS 叢集的 VPC
 - 更新掛載點，使用 Security Group：`eks-efs-sg`
 - 等待掛載點可用
 
-### 3. 安裝 EFS CSI Driver
+### 安裝 EFS CSI Driver
 ```bash
 $ kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-efs-csi-driver/master/deploy/kubernetes/base/csidriver.yaml
+csidriver.storage.k8s.io/efs.csi.aws.com configured
+
 $ kubectl get csidriver
+NAME              ATTACHREQUIRED   PODINFOONMOUNT   STORAGECAPACITY   TOKENREQUESTS   REQUIRESREPUBLISH   MODES        AGE
+efs.csi.aws.com   false            false            false             <unset>         false               Persistent   24m
 ```
 
-### 4. 建立 Persistent Volume (PV)
+### 建立 Persistent Volume (PV)
 ```bash
 $ git clone https://github.com/uopsdod/k8sOnCloud_hiskio.git
 $ cd ~/k8sOnCloud_hiskio/aws_eks/initial
@@ -273,37 +283,160 @@ spec:
     - ReadWriteMany
   csi:
     driver: efs.csi.aws.com
-    volumeHandle: fs-0cb4114cfe67fb5c5  # 替換為您的 EFS 檔案系統 ID
+    volumeHandle: fs-0a1700a34bf9e8d24  # 替換成你剛才建立的 EFS 檔案系統 ID
 ```
 
-### 5. 部署 PV 和 PVC
+### 部署 PV 和 PVC
 ```bash
 $ kubectl apply -f aws-efs-volume-pv.yaml
-$ kubectl get pv
-$ kubectl describe pv app-pv
+persistentvolume/app-pv created
 
-$ kubectl apply -f simple-volume-pvc.yaml
-$ kubectl get pvc
-$ kubectl describe pvc app-pvc
+$ kubectl get pv
+NAME     CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+app-pv   2Gi        RWX            Retain           Available           sc-001         <unset>                          16s
+
+$ kubectl describe pv app-pv
+Name:            app-pv
+Labels:          <none>
+Annotations:     <none>
+Finalizers:      [kubernetes.io/pv-protection]
+StorageClass:    sc-001
+Status:          Available
+Claim:
+Reclaim Policy:  Retain
+Access Modes:    RWX
+VolumeMode:      Filesystem
+Capacity:        2Gi
+Node Affinity:   <none>
+Message:
+Source:
+    Type:              CSI (a Container Storage Interface (CSI) volume source)
+    Driver:            efs.csi.aws.com
+    FSType:
+    VolumeHandle:      fs-0a1700a34bf9e8d24
+    ReadOnly:          false
+    VolumeAttributes:  <none>
+Events:                <none>  # 重點是這行，注意有沒有 error message
 ```
 
-### 6. 部署應用程式
+
+編輯 `simple-volume-pvc.yaml`：
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-pvc
+spec:
+  storageClassName: sc-001
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
+```
+
+```bash
+$ kubectl apply -f simple-volume-pvc.yaml
+persistentvolumeclaim/app-pvc created
+
+$ kubectl get pvc
+NAME      STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+app-pvc   Bound    app-pv   2Gi        RWX            sc-001         <unset>                 29s
+
+$ kubectl describe pvc app-pvc
+Name:          app-pvc
+Namespace:     default
+StorageClass:  sc-001
+Status:        Bound
+Volume:        app-pv
+Labels:        <none>
+Annotations:   pv.kubernetes.io/bind-completed: yes
+               pv.kubernetes.io/bound-by-controller: yes
+Finalizers:    [kubernetes.io/pvc-protection]
+Capacity:      2Gi
+Access Modes:  RWX
+VolumeMode:    Filesystem
+Used By:       <none>
+Events:        <none> # 重點是這行，注意有沒有 error message
+```
+
+### 部署應用程式
+編輯 `simple-deployment-volume.yaml`：
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app-pod
+  template:
+    metadata:
+      labels:
+        app: app-pod
+    spec:
+      containers:
+      - name: app-container
+        image: uopsdod/k8s-hostname-amd64-beta:v1
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - name: app-volume
+            mountPath: /app/data
+      volumes:
+        - name: app-volume
+          persistentVolumeClaim:
+            claimName: app-pvc
+```
+
 ```bash
 $ kubectl apply -f simple-deployment-volume.yaml
+deployment.apps/app-deployment created
+
 $ kubectl get deployments
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+app-deployment   0/3     3            0           22s
+
 $ kubectl get pods -w
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+app-deployment   0/3     3            0           25s
+app-deployment   1/3     3            1           77s
+app-deployment   2/3     3            2           80s
+app-deployment   3/3     3            3           84s
 ```
 
-### 7. 測試持久化儲存
+### 測試持久化儲存
 ```bash
 $ kubectl get pods
+NAME                              READY   STATUS    RESTARTS   AGE
+app-deployment-58449898c5-4fqws   1/1     Running   0          2m31s
+app-deployment-58449898c5-7m54s   1/1     Running   0          2m31s
+app-deployment-58449898c5-hbblt   1/1     Running   0          2m31s
+
 $ kubectl exec -it [pod_name] -- touch /app/data/file003.txt
 $ kubectl exec -it [pod_name] -- ls /app/data
+file001.txt
 
 $ kubectl delete pods --all
+pod "app-deployment-58449898c5-4fqws" deleted
+pod "app-deployment-58449898c5-7m54s" deleted
+pod "app-deployment-58449898c5-hbblt" deleted
+
 $ kubectl get pods -w
+NAME                              READY   STATUS              RESTARTS   AGE
+app-deployment-58449898c5-4jgxk   0/1     ContainerCreating   0          57s
+app-deployment-58449898c5-mcsjj   0/1     ContainerCreating   0          57s
+app-deployment-58449898c5-njmp8   0/1     ContainerCreating   0          57s
+app-deployment-58449898c5-njmp8   1/1     Running             0          68s
+app-deployment-58449898c5-mcsjj   1/1     Running             0          69s
+app-deployment-58449898c5-4jgxk   1/1     Running             0          72s
 
 $ kubectl exec -it [pod_name] -- ls /app/data
+file001.txt
 ```
 
 ---
