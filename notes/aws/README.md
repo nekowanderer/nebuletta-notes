@@ -19,6 +19,7 @@
   - [14. About AWS SES Configuration Set](en/14_aws_ses_configuration_set.md)
   - [15. EKS Fargate Cluster Architecture and Mechanism](en/15_aws_eks_fargate_cluster.md)
   - [16. AWS EKS and EFS Persistent Storage Integration](en/16_aws_eks_and_efs.md)
+  - [17. AWS EKS and Ingress Integration](en/17_aws_eks_and_ingress.md)
   
 - [繁體中文](zh-tw/)
   - [01. AWS 網路基礎概念](zh-tw/01_aws_networking_basics.md)
@@ -37,6 +38,7 @@
   - [14. 關於 AWS SES Configuration Set](zh-tw/14_aws_ses_configuration_set.md)
   - [15. EKS Fargate Cluster 架構與機制](zh-tw/15_aws_eks_fargate_cluster.md)
   - [16. AWS EKS 與 EFS 永久儲存整合](zh-tw/16_aws_eks_and_efs.md)
+  - [17. AWS EKS 與 Ingress 的整合](zh-tw/17_aws_eks_and_ingress.md)
   
 - [日本語](ja/)
   - [01. AWS ネットワークの基礎](ja/01_aws_networking_basics.md)
@@ -55,3 +57,4 @@
   - [14. AWS SES Configuration Set について](ja/14_aws_ses_configuration_set.md)
   - [15. EKS Fargate Cluster のアーキテクチャとメカニズム](ja/15_aws_eks_fargate_cluster.md)
   - [16. AWS EKS と EFS 永続ストレージ統合](ja/16_aws_eks_and_efs.md)
+  - [17. AWS EKS と Ingress の統合](ja/17_aws_eks_and_ingress.md)

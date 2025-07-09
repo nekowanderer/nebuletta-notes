@@ -611,13 +611,15 @@ $ while sleep 0.005; do curl -s ${INGRESS_IP}:80/beta -H 'Host: all.demo.com'; d
 5. **刪除管理用 EC2 執行個體**
 6. **刪除管理用 VPC**
 
+如果不慎在刪除 EKS 之前先將 VPC 刪除了，可以透過以下順序清除資源：
+1. **到 EKS 之下，刪除 Cluster 底下的 Fargate profile**
+2. **到 CloudFormation 之下刪除 Cluster**
+3. **回到 VPC 把剩餘的 EKS 相關資源刪除（通常都會在前一步驟清乾淨）**
+
 ---
 
 ## 注意事項
 
 - 所有指令都假設在 Linux 環境下執行
-- 請根據您的實際環境調整變數值（如 VPC ID、EFS 檔案系統 ID 等）
+- 請根據實際環境調整變數值（如 VPC ID、EFS 檔案系統 ID 等）
 - 某些操作可能需要等待幾分鐘才能完成
-- 建議在測試環境中先進行驗證，再部署到生產環境
-
-
