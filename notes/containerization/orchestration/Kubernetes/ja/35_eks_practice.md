@@ -1,24 +1,24 @@
-# AWS EKS 實作指南
+# AWS EKS 実践ガイド
 
-[English](../en/35_eks_practice.md) | [繁體中文](../zh-tw/35_eks_practice.md) | [日本語](../ja/35_eks_practice.md) | [回到索引](../README.md)
+[English](../en/35_eks_practice.md) | [繁體中文](../zh-tw/35_eks_practice.md) | [日本語](../ja/35_eks_practice.md) | [インデックスに戻る](../README.md)
 
-## 目錄
-1. [環境準備](#環境準備)
-2. [EKS 叢集建立](#eks-叢集建立)
-3. [EFS 持久化儲存設定](#efs-持久化儲存設定)
+## 目次
+1. [環境構築](#環境構築)
+2. [EKS クラスター作成](#eks-クラスター作成)
+3. [EFS 永続ストレージ設定](#efs-永続ストレージ設定)
 4. [Load Balancer Controller 設定](#load-balancer-controller-設定)
-5. [多階段部署專案](#多階段部署專案)
-6. [HPA 自動擴展設定](#hpa-自動擴展設定)
-7. [資源清理](#資源清理)
+5. [マルチステージデプロイメントプロジェクト](#マルチステージデプロイメントプロジェクト)
+6. [HPA 自動スケーリング設定](#hpa-自動スケーリング設定)
+7. [リソースクリーンアップ](#リソースクリーンアップ)
 
 ---
 
-## 環境準備
+## 環境構築
 
-### 前置需求
-在開始 EKS 實作前，需要安裝以下工具：
+### 前提条件
+EKS 実装を開始する前に、以下のツールをインストールする必要があります：
 
-#### kubectl 安裝
+#### kubectl インストール
 ```bash
 $ curl -o kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.33.0/2025-05-01/bin/linux/amd64/kubectl
 $ chmod +x ./kubectl
@@ -29,7 +29,7 @@ $ echo 'export PATH=$PATH:$HOME/bin' >> ~/.zshrc
 $ kubectl version --short --client
 ```
 
-#### eksctl 安裝
+#### eksctl インストール
 ```bash
 $ mkdir ~/tmp
 $ curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C ~/tmp
@@ -37,7 +37,7 @@ $ mv ~/tmp/eksctl $HOME/bin/eksctl
 $ eksctl version
 ```
 
-#### Helm 安裝
+#### Helm インストール
 ```bash
 $ curl -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
 $ chmod 700 get_helm.sh
@@ -45,12 +45,12 @@ $ ./get_helm.sh
 $ helm version --short
 ```
 
-#### Git 安裝
+#### Git インストール
 ```bash
 $ sudo yum install -y git
 ```
 
-#### AWS CLI 安裝
+#### AWS CLI インストール
 ```bash
 $ aws --version
 $ sudo rm -rf /usr/bin/aws
@@ -60,12 +60,12 @@ $ sudo ./aws/install
 $ aws --version
 ```
 
-### AWS 權限設定
+### AWS 権限設定
 ```bash
 $ aws configure
 ```
 
-### 環境變數設定
+### 環境変数設定
 ```bash
 $ CLUSTER_NAME=your_cluster_name
 $ echo ${CLUSTER_NAME}
@@ -77,15 +77,15 @@ $ AWS_ACCOUNT=your_aws_account
 $ echo ${AWS_ACCOUNT}
 ```
 
-- 以上設定都已經封裝在 [ssm_user_setup.sh](https://github.com/nekowanderer/nebuletta/blob/main/scripts/ssm_user_setup.sh) 腳本之中，可調整 `Configurations` 區塊的變數後直接在 EC2 上執行，相關說明可參考此[連結](https://github.com/nekowanderer/nebuletta/blob/main/scripts/ssm_user_setup.sh)。
-- 完成後，也可以直接將家目錄下的 `.zshrc` 替換成[此處的內容方便接下來的練習](https://github.com/nekowanderer/nebuletta/blob/main/scripts/custom_zshrc)。
+- 上記の設定はすべて [ssm_user_setup.sh](https://github.com/nekowanderer/nebuletta/blob/main/scripts/ssm_user_setup.sh) スクリプトにパッケージ化されており、`Configurations` セクションの変数を調整してから EC2 で直接実行できます。関連説明は この[リンク](https://github.com/nekowanderer/nebuletta/blob/main/scripts/ssm_user_setup.sh) を参照してください。
+- 完了後、以下の練習の利便性のために、ホームディレクトリの `.zshrc` を[こちらの内容](https://github.com/nekowanderer/nebuletta/blob/main/scripts/custom_zshrc)に直接置き換えることもできます。
 
 ---
 
-## EKS Cluster 建立
-此步驟的細部設定請參考 [EKS 建立設定指南](./36_eks_cluster_setup.md)
+## EKS クラスター作成
+このステップの詳細設定については [EKS セットアップ設定ガイド](./36_eks_cluster_setup.md) を参照してください
 
-### 建立 Fargate 叢集
+### Fargate クラスターの作成
 ```bash
 $ eksctl create cluster --name ${CLUSTER_NAME} --version 1.33 --fargate
 2025-07-06 05:41:10 [ℹ]  eksctl version 0.210.0
@@ -142,7 +142,7 @@ $ eksctl create cluster --name ${CLUSTER_NAME} --version 1.33 --fargate
 2025-07-06 05:55:03 [✔]  EKS cluster "my-cluster-001" in "ap-northeast-1" region is ready
 ```
 
-### 檢查安裝結果
+### インストール結果の確認
 ```bash
 $ cat .kube/config
 apiVersion: v1
@@ -180,7 +180,7 @@ users:
       provideClusterInfo: false
 ```
 
-### 確認 kube-system namespace 下的各個元件
+### kube-system namespace 内のコンポーネント確認
 ```bash
 $ kubectl get all -n kube-system
 NAME                                  READY   STATUS    RESTARTS   AGE
@@ -207,17 +207,17 @@ replicaset.apps/coredns-5c658475b5          0         0         0       6m12s
 replicaset.apps/coredns-5ff77f65d4          2         2         2       2m36s
 replicaset.apps/metrics-server-7f76d4758d   2         2         0       5m41s
 ```
-- 這裡最重要的是 coredns，這個元件會協助我們進行 domain name 的相關處理。
+- ここで最も重要なのは coredns で、このコンポーネントがドメイン名関連の処理を支援します。
 
-### 建立 OIDC Provider
+### OIDC Provider の作成
 ```bash
 $ eksctl utils associate-iam-oidc-provider --cluster ${CLUSTER_NAME} --approve
 2025-07-06 05:56:55 [ℹ]  will create IAM Open ID Connect provider for cluster "my-cluster-001" in "ap-northeast-1"
 2025-07-06 05:56:56 [✔]  created IAM Open ID Connect provider for cluster "my-cluster-001" in "ap-northeast-1"
 ```
 
-### 刪除 EKS Cluster 
-後面還有很多相關練習，怕浪費錢的話就先砍掉，要用的時候再建立：
+### EKS クラスターの削除 
+この後には多くの関連練習があります。コストが心配な場合は、まず削除して、必要な時に再作成してください：
 ```bash
 $ eksctl delete cluster --region=ap-northeast-1 --name=my-cluster-001
 2025-07-06 06:00:02 [ℹ]  deleting EKS cluster "my-cluster-001"
@@ -235,26 +235,26 @@ $ eksctl delete cluster --region=ap-northeast-1 --name=my-cluster-001
 
 ---
 
-## EFS 持久化儲存設定
+## EFS 永続ストレージ設定
 
-### 建立 Security Group
+### セキュリティグループの作成
 <img src="../images/35_create_eks_efs_sg.jpg" width=600 />
 
-- 名稱：`eks-efs-sg`
-- 選擇 EKS 叢集的 VPC
-- 允許全部連線
+- 名前：`eks-efs-sg`
+- EKS クラスターの VPC を選択
+- すべての接続を許可
 
-### 建立 EFS 檔案系統
+### EFS ファイルシステムの作成
 <img src="../images/35_create_efs_1.jpg" width=600 />
 <img src="../images/35_create_efs_2.jpg" width=600 />
 <img src="../images/35_create_efs_3.jpg" width=600 />
 
-- 名稱：`eks-efs`
-- 選擇 EKS 叢集的 VPC
-- 更新掛載點，使用 Security Group：`eks-efs-sg`
-- 等待掛載點可用
+- 名前：`eks-efs`
+- EKS クラスターの VPC を選択
+- マウントターゲットを更新し、セキュリティグループ：`eks-efs-sg` を使用
+- マウントターゲットが利用可能になるまで待機
 
-### 安裝 EFS CSI Driver
+### EFS CSI Driver のインストール
 ```bash
 $ kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-efs-csi-driver/master/deploy/kubernetes/base/csidriver.yaml
 csidriver.storage.k8s.io/efs.csi.aws.com configured
@@ -264,14 +264,14 @@ NAME              ATTACHREQUIRED   PODINFOONMOUNT   STORAGECAPACITY   TOKENREQUE
 efs.csi.aws.com   false            false            false             <unset>         false               Persistent   24m
 ```
 
-### 建立 Persistent Volume (PV)
+### Persistent Volume (PV) の作成
 ```bash
 $ git clone https://github.com/uopsdod/k8sOnCloud_hiskio.git
 $ cd ~/k8sOnCloud_hiskio/aws_eks/initial
 $ cp simple-volume-pv.yaml aws-efs-volume-pv.yaml
 ```
 
-編輯 `aws-efs-volume-pv.yaml`：
+`aws-efs-volume-pv.yaml` を編集：
 ```yaml
 apiVersion: v1
 kind: PersistentVolume
@@ -286,10 +286,10 @@ spec:
     - ReadWriteMany
   csi:
     driver: efs.csi.aws.com
-    volumeHandle: fs-0a1700a34bf9e8d24  # 替換成你剛才建立的 EFS 檔案系統 ID
+    volumeHandle: fs-0a1700a34bf9e8d24  # 作成した EFS ファイルシステム ID に置き換え
 ```
 
-### 部署 PV 和 PVC
+### PV と PVC のデプロイ
 ```bash
 $ kubectl apply -f aws-efs-volume-pv.yaml
 persistentvolume/app-pv created
@@ -319,11 +319,10 @@ Source:
     VolumeHandle:      fs-0a1700a34bf9e8d24
     ReadOnly:          false
     VolumeAttributes:  <none>
-Events:                <none>  # 重點是這行，注意有沒有 error message
+Events:                <none>  # この行に注目し、エラーメッセージがないか確認
 ```
 
-
-編輯 `simple-volume-pvc.yaml`：
+`simple-volume-pvc.yaml` を編集：
 
 ```yaml
 apiVersion: v1
@@ -361,11 +360,11 @@ Capacity:      2Gi
 Access Modes:  RWX
 VolumeMode:    Filesystem
 Used By:       <none>
-Events:        <none> # 重點是這行，注意有沒有 error message
+Events:        <none> # この行に注目し、エラーメッセージがないか確認
 ```
 
-### 部署應用程式
-編輯 `simple-deployment-volume.yaml`：
+### アプリケーションのデプロイ
+`simple-deployment-volume.yaml` を編集：
 
 ```yaml
 apiVersion: apps/v1
@@ -412,7 +411,7 @@ app-deployment   2/3     3            2           80s
 app-deployment   3/3     3            3           84s
 ```
 
-### 測試持久化儲存
+### 永続ストレージのテスト
 ```bash
 $ kubectl get pods
 NAME                              READY   STATUS    RESTARTS   AGE
@@ -446,7 +445,7 @@ file001.txt
 
 ## Load Balancer Controller 設定
 
-### 建立 IAM Policy
+### IAM ポリシーの作成
 ```bash
 $ curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json
 
@@ -471,9 +470,9 @@ $ aws iam get-policy --policy-arn arn:aws:iam::${AWS_ACCOUNT}:policy/AWSLoadBala
   }
 }
 ```
-- 有了這個 IAM policy 之後，就可以去建立一個 k8s 的 service account
+- この IAM ポリシーがあることで、k8s のサービスアカウントを作成できます
 
-### 建立 Service Account
+### Service Account の作成
 ```bash
 $ eksctl create iamserviceaccount \
   --cluster=${CLUSTER_NAME} \
@@ -494,16 +493,16 @@ $ eksctl create iamserviceaccount \
 2025-07-11 13:48:04 [ℹ]  waiting for CloudFormation stack "eksctl-my-cluster-001-addon-iamserviceaccount-kube-system-aws-load-balancer-controller"
 2025-07-11 13:48:04 [ℹ]  created serviceaccount "kube-system/aws-load-balancer-controller"
 ```
-- Service account 可以讓 load balancer controller 具有需要的相關權限
+- Service Account により、ロードバランサーコントローラーが必要な権限を持つことができます
 
 ```bash
 $ eksctl get iamserviceaccount --cluster ${CLUSTER_NAME} --name aws-load-balancer-controller --namespace kube-system
 NAMESPACE       NAME                            ROLE ARN
 kube-system     aws-load-balancer-controller    arn:aws:iam::362395300803:role/eksctl-my-cluster-001-addon-iamserviceaccount-Role1-R6G3upoEDBOc
 ```
-- 這邊有看到輸出就表示 service account 建立成功了
+- この出力が表示されれば、サービスアカウントの作成が成功しています
 
-### 安裝 Load Balancer Controller
+### Load Balancer Controller のインストール
 ```bash
 $ helm repo add eks https://aws.github.io/eks-charts
 "eks" has been added to your repositories
@@ -517,16 +516,16 @@ $ kubectl apply -f crds.yaml
 customresourcedefinition.apiextensions.k8s.io/ingressclassparams.elbv2.k8s.aws created
 customresourcedefinition.apiextensions.k8s.io/targetgroupbindings.elbv2.k8s.aws created
 
-# 查詢一下 EKS cluster 所使用的 VPC ID
+# EKS クラスターが使用している VPC ID を照会
 $ aws eks describe-cluster --name ${CLUSTER_NAME} --query "cluster.resourcesVpcConfig.vpcId" --output json | jq
 "vpc-0cf3a9effdea78521"
 
-$ VPC_ID=vpc-0cf3a9effdea78521  # 替換為你在上面查到的 VPC ID
+$ VPC_ID=vpc-0cf3a9effdea78521  # 上記で見つけた VPC ID に置き換え
 
 $ echo ${VPC_ID}
 ```
 
-- 東西都齊全了，可以建立 load balancer controller 了：
+- すべて準備完了、ロードバランサーコントローラーを作成できます：
 
 ```bash
 $ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
@@ -546,7 +545,7 @@ NOTES:
 AWS Load Balancer controller installed!
 ```
 
-- 觀察一下 aws-load-balancer 的狀態，等待到 ready 為止：
+- aws-load-balancer の状態を観察し、ready になるまで待機：
 
 ```bash
 $ kubectl get all -n kube-system
@@ -582,20 +581,20 @@ replicaset.apps/metrics-server-6f674c86fd                 2         2         0 
 
 ---
 
-## 多階段部署專案
+## マルチステージデプロイメントプロジェクト
 
-### 建立 Fargate Profile
+### Fargate Profile の作成
 ```bash
 $ eksctl create fargateprofile --cluster ${CLUSTER_NAME} --region ${AWS_REGION} --name app-fp --namespace app-ns
 2025-07-11 14:05:22 [ℹ]  creating Fargate profile "app-fp" on EKS cluster "my-cluster-001"
 2025-07-11 14:05:40 [ℹ]  created Fargate profile "app-fp" on EKS cluster "my-cluster-001"
 ```
-- fargateprofile 是 AWS EKS 上的特有概念，可以想成是統整運算資源以及各種配置，以配合 AWS 進行 K8S 的部署
-- 此處的 namespace 跟之後要部署在其中的專案必須要是相同的
+- Fargate Profile は AWS EKS 独特の概念で、コンピューティングリソースとさまざまな設定を統合し、AWS と連携して K8s のデプロイメントを行うものと考えることができます
+- ここでの namespace は、後でその中にデプロイするプロジェクトと同じである必要があります
 
-### 部署應用程式
+### アプリケーションのデプロイ
 
-- 建立 beta-app-all-hpa.yaml:
+- beta-app-all-hpa.yaml の作成：
 ```yaml
 apiVersion: v1
 kind: Namespace
@@ -644,7 +643,7 @@ spec:
 ---
 ```
 
-- 建立 prod-app-all.yaml:
+- prod-app-all.yaml の作成：
 ```yaml
 apiVersion: v1
 kind: Namespace
@@ -688,7 +687,7 @@ spec:
 ---
 ```
 
-- 進行 apply 然後檢查結果：
+- apply して結果を確認：
 
 ```bash
 $ kubectl apply -f beta-app-all-hpa.yaml
@@ -721,19 +720,19 @@ replicaset.apps/beta-app-deployment-8679d5777b   1         1         1       95s
 replicaset.apps/prod-app-deployment-586c5dcc59   3         3         3       82s
 ```
 
-### 設定 Ingress
-建立 `ingress-path-aws-eks.yaml`：
+### Ingress の設定
+`ingress-path-aws-eks.yaml` の作成：
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-path
   namespace: app-ns
-  annotations: # 加入這個區塊，然後根據各個不同 cloud provider 提供的規格進行客製化
+  annotations: # このブロックを追加し、各クラウドプロバイダーの仕様に応じてカスタマイズ
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
 spec:
-  ingressClassName: alb # 這裡要改成 alb
+  ingressClassName: alb # ここを alb に変更
   rules:
   - host: all.demo.com
     http:
@@ -754,7 +753,7 @@ spec:
               number: 8080
 ```
 
-### 部署和測試 Ingress
+### Ingress のデプロイとテスト
 ```bash
 $ kubectl apply -f ingress-path-aws-eks.yaml
 ingress.networking.k8s.io/ingress-path created
@@ -762,12 +761,12 @@ ingress.networking.k8s.io/ingress-path created
 $ kubectl get ingress -n app-ns
 NAME           CLASS   HOSTS          ADDRESS                                                                  PORTS   AGE
 ingress-path   alb     all.demo.com   k8s-appns-ingressp-943bcaf159-9412560.ap-northeast-1.elb.amazonaws.com   80      30s
-# 此處看到 address 表示 ALB 正在部署
+# ここで address が表示されることは ALB がデプロイ中であることを示します
 
-# 要確定 ingress load balancer 是否真的建立完畢，要用以下這條：
+# ingress load balancer が実際に完全にデプロイされているかを確認するには、以下のコマンドを使用：
 $ dig +short k8s-appns-ingressp-943bcaf159-9412560.ap-northeast-1.elb.amazonaws.com
 35.73.232.178
-# 替換成上面看到的 address，此處要等大約 2~3 分鐘才會看到 IP 出現，代表 ALB 部署完成了
+# 上記で見た address に置き換え、約2〜3分待って IP が表示されれば ALB デプロイ完了
 
 $ INGRESS_IP=k8s-appns-ingressp-943bcaf159-9412560.ap-northeast-1.elb.amazonaws.com
 
@@ -777,13 +776,13 @@ $ curl ${INGRESS_IP}:80/beta -H 'Host: all.demo.com'
 $ curl ${INGRESS_IP}:80/prod -H 'Host: all.demo.com'
 [prod] served by: prod-app-deployment-586c5dcc59-wc6vq
 ```
-- **跟 local 的 minikube 不同的地方：**
-  - Ingress 的 yaml 設定中，`ingressClassName` 要指定為 `alb`
-  - 根據規格，在 metadata 之下加入 `annotations`，然後按需求設定
+- **ローカル minikube との違い：**
+  - Ingress の yaml 設定で、`ingressClassName` を `alb` に指定する必要がある
+  - 仕様に従って、metadata の下に `annotations` を追加し、必要に応じて設定
 
 ---
 
-## HPA 自動擴展設定
+## HPA 自動スケーリング設定
 
 ```bash
 $ kubectl get pod --all-namespaces
@@ -799,7 +798,7 @@ kube-system   coredns-5ff77f65d4-w9tjw                        1/1     Running   
 kube-system   metrics-server-6f674c86fd-859m7                 0/1     Pending   0          71m
 kube-system   metrics-server-6f674c86fd-qv6d4                 0/1     Pending   0          71m
 ```
-- 這裡是無法看到 pod 到底是建立在哪個實際的 node 之上的，所以可以加上一個參數，如下：
+- ここでは pod がどの実際のノード上に作成されているかを見ることができないので、以下のようにパラメーターを追加できます：
 
 ```bash
 $ kubectl get pod -o wide --all-namespaces
@@ -815,7 +814,7 @@ kube-system   coredns-5ff77f65d4-w9tjw                        1/1     Running   
 kube-system   metrics-server-6f674c86fd-859m7                 0/1     Pending   0          73m   <none>            <none>                                                       <none>           <none>
 kube-system   metrics-server-6f674c86fd-qv6d4                 0/1     Pending   0          73m   <none>            <none>                                                       <none>           <none>
 ```
-- 專門觀察一下前面部署的 pod：
+- 特にデプロイした pod を観察：
 ```bash
 $ kubectl get pod -o wide -n app-ns
 NAME                                   READY   STATUS    RESTARTS   AGE   IP                NODE                                                         NOMINATED NODE   READINESS GATES
@@ -824,10 +823,10 @@ prod-app-deployment-586c5dcc59-52wpt   1/1     Running   0          23m   192.16
 prod-app-deployment-586c5dcc59-sd4h7   1/1     Running   0          23m   192.168.120.84    fargate-ip-192-168-120-84.ap-northeast-1.compute.internal    <none>           <none>
 prod-app-deployment-586c5dcc59-wc6vq   1/1     Running   0          23m   192.168.138.12    fargate-ip-192-168-138-12.ap-northeast-1.compute.internal    <none>           <none>
 ```
-- 可以看到每個 pod 都被分布在不同的 node 上了，相較之下，在 local 的 minikube 環境裡，大家都只會出現在同一個 node，也就是 local 上
-- 這其實也意味著，在真實環境裡，EKS 會協助進行 scaling 相關的動作，可以按照流量門檻讓 cluster 進行伸縮
+- 各 pod が異なるノードに分散していることがわかります。対照的に、ローカルの minikube 環境では、すべて同じノード（ローカル）にのみ現れます
+- これは実際の環境では、EKS がスケーリング関連の動作を支援し、トラフィック閾値に応じてクラスターを拡張・縮小できることを意味します
 
-### 安裝 Metrics Server
+### Metrics Server のインストール
 ```bash
 $ cd ~/k8sOnCloud_hiskio/aws_eks/initial/
 
@@ -842,16 +841,16 @@ service/metrics-server created
 deployment.apps/metrics-server created
 apiservice.apiregistration.k8s.io/v1beta1.metrics.k8s.io unchanged
 
-# 如果有看到如下錯誤訊息：
+# 以下のエラーメッセージが表示された場合：
 # The Deployment "metrics-server" is invalid:
 # * spec.template.spec.containers[0].ports[1].name: Duplicate value: "https"
 # * spec.selector: Invalid value: v1.LabelSelector{MatchLabels:map[string]string{"app.kubernetes.io/instance":"metrics-server", "app.kubernetes.io/name":"metrics-server", "k8s-app":"metrics-server"}, MatchExpressions:[]v1.LabelSelectorRequirement(nil)}: field is immutable
 # 
-# 表示可能無意間重複安裝了，執行以下指令砍乾淨：
+# これは重複してインストールした可能性があることを示しています。以下のコマンドでクリーンアップ：
 # $ kubectl delete deployment metrics-server -n kube-system
 # $ kubectl delete service metrics-server -n kube-system
 # $ kubectl delete serviceaccount metrics-server -n kube-system
-# 然後再重新安裝一次應該就可以了
+# その後再インストールすればうまくいくはずです
 
 $ kubectl get deployment metrics-server -n kube-system -w
 NAME             READY   UP-TO-DATE   AVAILABLE   AGE
@@ -859,7 +858,7 @@ metrics-server   0/1     1            0           23s
 metrics-server   1/1     1            1           72s
 ```
 
-### 建立 HPA
+### HPA の作成
 ```bash
 $ kubectl autoscale deployment beta-app-deployment --cpu-percent=10 --min=1 --max=10 -n app-ns
 horizontalpodautoscaler.autoscaling/beta-app-deployment autoscaled
@@ -868,26 +867,26 @@ $ kubectl get hpa -n app-ns
 NAME                  REFERENCE                        TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
 beta-app-deployment   Deployment/beta-app-deployment   cpu: 0%/10%   1         10        1          3m59s
 ```
-- 剛建立完畢，還很涼
+- 作成したばかりで、まだ非常にアイドル状態
 
-### 監控和測試自動擴展
+### 自動スケーリングの監視とテスト
 ```bash
-# 第一個 tab 用來監控 Pod 和 Node 數量
+# 第1タブで Pod とノード数を監視
 $ kubectl get pod -o wide -n app-ns -w | grep beta-app
 
-# 第二個 tab 用來查看結果
+# 第2タブで結果を確認
 $ kubectl get hpa -n app-ns -w
-# - CPU 使用率百分比
-# - 建立的 Pod/Node 數量
+# - CPU 使用率パーセンテージ
+# - 作成された Pod/ノード数
 
-# 第三個 tab 用來測試自動擴展
+# 第3タブで自動スケーリングをテスト
 $ curl ${INGRESS_IP}:80/beta -H 'Host: all.demo.com'
 $ while sleep 0.005; do curl -s ${INGRESS_IP}:80/beta -H 'Host: all.demo.com'; done
-# 按 Ctrl + C 停止
+# Ctrl + C で停止
 
 ```
 
-- 第一個 tab：
+- 第1タブ：
 
 ```bash
 $ kubectl get pod -o wide -n app-ns -w | grep beta-app
@@ -898,16 +897,16 @@ beta-app-deployment-8679d5777b-gsg4z   0/1     Pending   0          52s   <none>
 beta-app-deployment-8679d5777b-gsg4z   0/1     ContainerCreating   0          53s   <none>            fargate-ip-192-168-185-79.ap-northeast-1.compute.internal    <none>                                        <none>
 beta-app-deployment-8679d5777b-gsg4z   1/1     Running             0          79s   192.168.185.79    fargate-ip-192-168-185-79.ap-northeast-1.compute.internal    <none>                                        <none>
 
-# 長出來了，可以先取消然後再重下一次指令比較好觀察：
+# 1つ増えました。一度キャンセルしてから再実行すると観察しやすいです：
 
 $ kubectl get pod -o wide -n app-ns -w | grep beta-app
 beta-app-deployment-8679d5777b-2v77d   1/1     Running   0          50m     192.168.165.38    fargate-ip-192-168-165-38.ap-northeast-1.compute.internal    <none>           <none>
 beta-app-deployment-8679d5777b-gsg4z   1/1     Running   0          2m25s   192.168.185.79    fargate-ip-192-168-185-79.ap-northeast-1.compute.internal    <none>           <none>
 
-# 可以觀察到新長出來的 pod 是生在不同的 node 上
+# 新しく作成された pod が異なるノード上にあることが観察できます
 ```
 
-- 第二個 tab:
+- 第2タブ：
 
 ```bash
 NAME                  REFERENCE                        TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
@@ -927,26 +926,26 @@ beta-app-deployment   Deployment/beta-app-deployment   cpu: 0%/10%    1         
 beta-app-deployment   Deployment/beta-app-deployment   cpu: 1%/10%    1         10        2          14m
 beta-app-deployment   Deployment/beta-app-deployment   cpu: 0%/10%    1         10        1          14m
 
-# 等 CPU usage 到達 20% 左右就可以把第三個 tab 的 curl command 關掉了，然後等個幾分鐘讓 replicas 縮減回 1
+# CPU 使用率が約 20% に達したら第3タブの curl コマンドを停止し、数分待って replicas が 1 に戻るのを待ちます
 ```
 
-- 回到第一個 tab：
+- 第1タブに戻る：
 
 ```bash
 $ kubectl get pod -o wide -n app-ns -w | grep beta-app
 beta-app-deployment-8679d5777b-2v77d   1/1     Running   0          57m   192.168.165.38    fargate-ip-192-168-165-38.ap-northeast-1.compute.internal    <none>           <none>
 ```
-- 變回一個了
+- 1つに戻りました
 
 ---
 
-## 資源清理
+## リソースクリーンアップ
 
-完成測試後，請依序清理以下資源：
+テスト完了後、以下のリソースを順番にクリーンアップしてください：
 
-1. **刪除 EFS 掛載點**
-2. **刪除 EFS 檔案系統**
-3. **刪除 EKS 叢集**
+1. **EFS マウントターゲットの削除**
+2. **EFS ファイルシステムの削除**
+3. **EKS クラスターの削除**
     ```bash
     $ eksctl delete cluster --name ${CLUSTER_NAME}
     2025-07-11 15:16:19 [ℹ]  deleting EKS cluster "my-cluster-001"
@@ -958,26 +957,26 @@ beta-app-deployment-8679d5777b-2v77d   1/1     Running   0          57m   192.16
     2025-07-11 15:20:36 [✔]  kubeconfig has been updated
     2025-07-11 15:20:36 [ℹ]  cleaning up AWS load balancers created by Kubernetes objects of Kind Service or Ingress
     Error: deadline surpassed waiting for AWS load balancers to be deleted: k8s-appns-ingressp-943bcaf159
-
-    # 這步驟可以砍掉所有的 fargate profile，然後 ALB 砍不動的話就回 AWS console 手動砍就好
+    
+    # このステップですべての fargate profile を削除できます。ALB が削除できない場合は AWS コンソールで手動削除
     ```
-4. **進入 AWS EC2 -> Load balancers -> 手動刪除 ALB**
-5. **進入 AWS VPC -> NAT Gateway -> 手動刪除 Cluster 的 NAT Gateway**
-5. **進入 AWS EKS -> Clusters -> 手動刪除 Cluster**
-5. **進入 AWS CloudFormation -> Stacks -> 手動刪除 Load balancer controller 以及 EKS Cluster**
-5. **刪除管理用 EC2 執行個體**
-6. **刪除管理用 VPC**
+4. **AWS EC2 -> Load balancers -> ALB を手動削除**
+5. **AWS VPC -> NAT Gateway -> クラスターの NAT Gateway を手動削除**
+5. **AWS EKS -> Clusters -> クラスターを手動削除**
+5. **AWS CloudFormation -> Stacks -> Load balancer controller と EKS Cluster を手動削除**
+5. **管理用 EC2 インスタンスの削除**
+6. **管理用 VPC の削除**
 
-如果不慎在刪除 EKS 之前先將 VPC 刪除了，可以透過以下順序清除資源：
-1. **到 EKS 之下，刪除 Cluster 底下的 Fargate profile**
-2. **到 CloudFormation 之下刪除 Load balancer controller 與 Cluster**
-3. **回到 VPC 把剩餘的 EKS 相關資源刪除（通常都會在前一步驟清乾淨）**
-4. 如果覺得 AWS 卡住砍不動了，就自己按照資源的順序手動全部砍掉
+もし EKS を削除する前に誤って VPC を削除してしまった場合、以下の順序でリソースをクリーンアップできます：
+1. **EKS でクラスター下の Fargate profile を削除**
+2. **CloudFormation で Load balancer controller とクラスターを削除**
+3. **VPC に戻って残りの EKS 関連リソースを削除（通常は前のステップできれいになります）**
+4. AWS が詰まって削除できないと感じた場合は、リソースの順序に従って手動ですべて削除
 
 ---
 
 ## 注意事項
 
-- 所有指令都假設在 Linux 環境下執行
-- 請根據實際環境調整變數值（如 VPC ID、EFS 檔案系統 ID 等）
-- 某些操作可能需要等待幾分鐘才能完成
+- すべてのコマンドは Linux 環境での実行を前提としています
+- 実際の環境に応じて変数値（VPC ID、EFS ファイルシステム ID など）を調整してください
+- 一部の操作は完了まで数分かかる場合があります
