@@ -81,7 +81,6 @@
 - 在 EC2 上使用，要配合 ASG 才能達到完整彈性。
 
 ---
-
 ## ECS Task ≠ Container Instance
 
 - Q: 所以，ECS task 等價於 container instance 嗎?
@@ -89,7 +88,8 @@
 
 | 名詞                                | 說明                                                                        | 比喻                                       |
 | --------------------------------- | ------------------------------------------------------------------------- | ---------------------------------------- |
-| **ECS Task**                      | 是「一組容器」的運行實例，根據 task definition 執行。<br>可以只跑一個 container，也可以是多個 container。 | 🧳「任務包」：裝著 1 個或多個 container 的小背包，接到任務就出發 |
+| **ECS Task Definition**           | 是容器組的定義，必須在此定義好 task 所需的各種條件，譬如運算資源需求以及 container image | 背包的製造藍圖，也可以說是 K8S 當中的 Pod template |
+| **ECS Task**                      | 是「一組容器」的運行實例，根據 task definition 執行。<br>可以只跑一個 container，也可以是多個 container。 | 🧳「任務包」：裝著 1 個或多個 container 的小背包，接到任務就出發，也可以想成是 K8S 中的 Pod |
 | **Container Instance**            | 這個詞**只在 ECS on EC2 才會出現**，意思是被註冊到 ECS 的一台 EC2。                            | 🏠「容器宿主主機」：一棟可以放很多 ECS task 的房子          |
 | **Fargate 沒有 Container Instance** | Fargate 是 serverless，沒有 EC2。Task 是直接被 AWS 放到某個他幫你管的地方跑。                   | 雲中小套房：AWS 自動分配給每個任務一間獨立房間，你不用管地址或清潔費     |
 
