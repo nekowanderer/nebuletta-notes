@@ -28,3 +28,6 @@ A comprehensive multilingual documentation repository covering Terraform concept
   - **🇺🇸 English** (`en`) - International standard
   - **🇹🇼 繁體中文** (`zh-tw`) - Traditional Chinese
   - **🇯🇵 日本語** (`ja`) - Japanese
+
+## References
+- [Terraform AWS Provider Documents](https://registry.terraform.io/providers/hashicorp/aws/latest)

@@ -21,6 +21,7 @@
   - [16. AWS EKS and EFS Persistent Storage Integration](en/16_aws_eks_and_efs.md)
   - [17. AWS EKS and Ingress Integration](en/17_aws_eks_and_ingress.md)
   - [18. AWS ECS: Differences Between EC2 Mode and Fargate Mode](en/18_aws_ecs.md)
+  - [19. AWS Load Balancing Guide](en/19_aws_load_balancing.md)
   
 - [繁體中文](zh-tw/)
   - [01. AWS 網路基礎概念](zh-tw/01_aws_networking_basics.md)
@@ -41,6 +42,7 @@
   - [16. AWS EKS 與 EFS 永久儲存整合](zh-tw/16_aws_eks_and_efs.md)
   - [17. AWS EKS 與 Ingress 的整合](zh-tw/17_aws_eks_and_ingress.md)
   - [18. AWS ECS：EC2 Mode 與 Fargate Mode 差異](zh-tw/18_aws_ecs.md)
+  - [19. AWS 負載均衡指南](zh-tw/19_aws_load_balancing.md)
   
 - [日本語](ja/)
   - [01. AWS ネットワークの基礎](ja/01_aws_networking_basics.md)
@@ -61,3 +63,4 @@
   - [16. AWS EKS と EFS 永続ストレージ統合](ja/16_aws_eks_and_efs.md)
   - [17. AWS EKS と Ingress の統合](ja/17_aws_eks_and_ingress.md)
   - [18. AWS ECS：EC2 Mode と Fargate Mode の違い](ja/18_aws_ecs.md)
+  - [19. AWS ロードバランシングガイド](ja/19_aws_load_balancing.md)
