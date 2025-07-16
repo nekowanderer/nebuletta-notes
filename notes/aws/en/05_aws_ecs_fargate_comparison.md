@@ -90,8 +90,9 @@
 | Term | Description | Metaphor |
 |------|-------------|----------|
 | **ECS Task Definition** | Definition of a container group. Must define all required conditions for the task here, such as compute resource requirements and container images | Blueprint for backpack manufacturing, can also be thought of as Pod template in K8s |
-| **ECS Task** | A running instance of "a group of containers" based on task definition.<br>Can run one or multiple containers. | 🧳 "Task Package": A small backpack containing 1 or more containers, ready to go when called, can also be thought of as a Pod in K8s |
-| **Container Instance** | This term **only appears in ECS on EC2**, meaning an EC2 registered to ECS. | 🏠 "Container Host": A house that can hold many ECS tasks |
+| **ECS Task** | A running instance of "a group of containers" based on task definition.<br>Can run one or multiple containers. |  "Task Package": A small backpack containing 1 or more containers, ready to go when called, can also be thought of as a Pod in K8s |
+| **ECS Service** | Manages service count and load balancing configuration, directing traffic to backend ECS Tasks | Equivalent to K8s Service + K8s Deployment |
+| **Container Instance** | This term **only appears in ECS on EC2**, meaning an EC2 registered to ECS. |  "Container Host": A house that can hold many ECS tasks |
 | **Fargate has no Container Instance** | Fargate is serverless, no EC2. Tasks are directly placed by AWS in managed locations. | Cloud Apartment: AWS automatically assigns each task an independent room, you don't need to worry about address or cleaning fees |
 
 #### Differences
