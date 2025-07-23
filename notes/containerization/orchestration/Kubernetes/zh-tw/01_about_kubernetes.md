@@ -73,3 +73,47 @@ Kubernetes 是一個容器編排平台，負責自動化部署、擴展和管理
 - Azure AKS：Microsoft Azure Kubernetes Service
 
 ---
+
+## Learning Map
+```
+      +-----+       |                +----------------------------+                     |     +------------+     
+      | App |       |                | Kubernetes Deployment Plan |                     |     | Deployment |    
+      +-----+       |                +----------------------------+                     |     +------------+    
+         |          |                       /              \                            |            |          
++----------------+  |          +---------------+       +-----------------+              |    +---------------+  
+| What to deploy |  |          | how to deploy |       | where to deploy |              |    | actual deploy |  
++----------------+  |          +---------------+       +-----------------+              |    +---------------+  
+                    |                                                                   |                       
+    +--------+      |   +---------------------------+  +--------------------+           |       +----------+    
+    | Docker |      |   | Computing Unit Deployment |  | Network Management |           |       | minikube |    
+    +--------+      |   +---------------------------+  +--------------------+           |       +----------+    
+    +--------+      |          |                            |                           |       +------------+  
+    | podman |      |          |-Pods                       |-Service ClusterIP         |       | Amazon EKS |  
+    +--------+      |          |                            |                           |       +------------+  
+                    |          |-ReplicaSets                |-Service NodePort          |       +------------+  
+                    |          |                            |                           |       | Google GKE |  
+                    |          |-Deployments                |-Service LoadBalancer      |       +------------+  
+                    |          |                            |                           |                       
+                    |          |-Rolling Updates            |-Ingress Default Backend   |                       
+                    |          |                            |                           |                       
+                    |          |-Roll back                  |-Ingress Hostname-based    |                       
+                    |          |                            |                           |                       
+                    |          +-HPA                        +-Ingress Path-based        |                       
+                    |                                                                   |                       
+                    |   +-----------------------+      +--------------------+           |                       
+                    |   | Monitoring Deployment |      | Storage Deployment |           |                       
+                    |   +-----------------------+      +--------------------+           |                       
+                    |         |                             |                           |                       
+                    |         |-StartupProbe                |-PV                        |                       
+                    |         |                             |                           |                       
+                    |         |-LivenessProbe               |-PVC                       |                       
+                    |         |                             |                           |                       
+                    |         +-ReadinessProbe              +-Storage Class             |                       
+                    |                                                                   |                       
+                    |                                  +---------------------+          |                       
+                    |                                  | Resource Management |          |                       
+                    |                                  +---------------------+          |                       
+                    |                                        |                          |                       
+                    |                                        +-Namespace                |                       
+                                                                                                   
+```
