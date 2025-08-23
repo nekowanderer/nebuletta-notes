@@ -142,3 +142,51 @@ $ kubectl delete deployments --all
 - **Pod 模板**: 定義新建立的 Pod 應該具備的規格和設定
 - **版本控制**: Deployment 支援滾動更新和版本回滾功能（進階功能）
 - **資源層級**: Deployment > ReplicaSet > Pod，刪除上層資源會影響下層資源
+
+
+## 關於 Self-healing
+
+- Pod 層級：
+  - Deployment / ReplicaSet / StatefulSet 這些控制器會維持期望的副本數。如果某個 Pod crash 掉或被刪除，控制器會自動建立新的 Pod 來補足。這就是 K8S 常說的「heal pods」。
+
+- Node 層級：
+  - Kubernetes 本身不會修復或重建 Node。如果一個 Node 掛了（硬體壞掉、網路斷線或 VM 被刪掉），K8S 只會把這個 Node 標記為 NotReady，並經過一段時間後（由 node-controller 判斷），將該 Node 上的 Pod 標記為失敗，然後再重新在其他可用的 Node 上排程新的 Pod。
+
+> ⚠️ 換句話說，K8S 只能做到「pod rescheduling」，但不能「heal node」或讓 node 自己復活。
+
+#### 那 Node 要怎麼 heal？
+
+- 這通常要靠外部的基礎設施層來處理，例如：
+  - 雲端環境：
+    - AWS EKS → 搭配 Auto Scaling Group (ASG) + Cluster Autoscaler，自動替換壞掉的 EC2 node。
+    - GKE / AKS → 內建 node auto-repair 功能。
+  - On-premise 環境：
+    - 可能要用 MetalLB + Cluster Autoscaler 或額外的監控/自動化工具（例如 Ansible, Terraform, 或硬體管理系統）來做。
+
+- 總結：
+  - K8S 會 heal Pods，但 Node 的「healing」要靠雲端平台或額外的 node 管理工具來完成。
+
+## 關於 Rolling update
+Deployment 的 rolling update 流程
+
+1. 使用者下指令 (kubectl apply -f ...)
+  - 更新 Deployment 的規格 (例如 image: v2)。
+  - 這個新的期望狀態會被寫進 etcd（K8S 的唯一狀態儲存）。
+2. Deployment Controller 發現差異
+  - 它會從 etcd 讀到「期望狀態」跟「實際狀態」不同。
+  - 比如：目前 nginx:v1 的 ReplicaSet 有 5 個 Pod，期望是 nginx:v2。
+3. 生成新的 ReplicaSet
+  - Controller 建立一個新的 ReplicaSet（對應 nginx:v2）。
+  - 舊的 ReplicaSet (nginx:v1) 不會馬上刪掉，而是逐步 scale down。
+4. 滾動更新 (RollingUpdate)
+  - Controller 根據 Deployment 的策略 (spec.strategy.rollingUpdate) 去控制：
+    - maxUnavailable：一次可以有多少 Pod 不可用。
+    - maxSurge：一次最多可以多開多少額外 Pod。
+  - 實際上就是「同時 scale up 新 RS，scale down 舊 RS」，直到數量達標。
+5. 狀態紀錄
+  - 每個 Deployment 的 狀態 (status.conditions、status.replicas、status.updatedReplicas …) 都會更新並存到 etcd。
+  - 這樣 kubectl rollout status deployment/... 就能查出目前更新進度。
+
+小結：
+  - etcd 是唯一真實來源 (source of truth)，Deployment 的 spec 和更新進度全都記錄在 etcd。
+  - Deployment Controller 是執行者，負責根據 etcd 裡的「期望狀態」去做 Pod 的替換，並把過程狀態回寫 etcd。

@@ -141,4 +141,52 @@ $ kubectl delete deployments --all
 - **Label Selector**: Uses `matchLabels` to identify and manage Pods belonging to this Deployment
 - **Pod Template**: Defines the specifications and settings that newly created Pods should have
 - **Version Control**: Deployment supports rolling updates and version rollback functionality (advanced features)
-- **Resource Hierarchy**: Deployment > ReplicaSet > Pod, deleting upper-level resources affects lower-level resources 
+- **Resource Hierarchy**: Deployment > ReplicaSet > Pod, deleting upper-level resources affects lower-level resources
+
+
+## About Self-healing
+
+- Pod Level:
+  - Controllers like Deployment / ReplicaSet / StatefulSet maintain the desired replica count. If a Pod crashes or gets deleted, the controller will automatically create new Pods to fulfill the requirement. This is what K8S commonly refers to as "heal pods".
+
+- Node Level:
+  - Kubernetes itself does not repair or rebuild Nodes. If a Node fails (hardware failure, network disconnection, or VM deletion), K8S will only mark this Node as NotReady, and after a certain period (determined by node-controller), mark the Pods on that Node as failed, then reschedule new Pods on other available Nodes.
+
+> ⚠️ In other words, K8S can only achieve "pod rescheduling", but cannot "heal node" or make nodes revive themselves.
+
+#### How to heal Nodes?
+
+- This usually relies on external infrastructure layers, for example:
+  - Cloud environments:
+    - AWS EKS → Combined with Auto Scaling Group (ASG) + Cluster Autoscaler, automatically replace failed EC2 nodes.
+    - GKE / AKS → Built-in node auto-repair functionality.
+  - On-premise environments:
+    - May use MetalLB + Cluster Autoscaler or additional monitoring/automation tools (such as Ansible, Terraform, or hardware management systems).
+
+- Summary:
+  - K8S heals Pods, but Node "healing" depends on cloud platforms or additional node management tools.
+
+## About Rolling Update
+Deployment rolling update process
+
+1. User executes command (kubectl apply -f ...)
+  - Updates Deployment specifications (e.g., image: v2).
+  - This new desired state is written to etcd (K8S's single source of truth storage).
+2. Deployment Controller detects differences
+  - It reads from etcd that the "desired state" differs from "actual state".
+  - For example: currently nginx:v1 ReplicaSet has 5 Pods, desired is nginx:v2.
+3. Generate new ReplicaSet
+  - Controller creates a new ReplicaSet (corresponding to nginx:v2).
+  - The old ReplicaSet (nginx:v1) won't be deleted immediately, but gradually scaled down.
+4. Rolling Update (RollingUpdate)
+  - Controller controls according to Deployment strategy (spec.strategy.rollingUpdate):
+    - maxUnavailable: How many Pods can be unavailable at once.
+    - maxSurge: Maximum number of additional Pods that can be created at once.
+  - Actually "simultaneously scale up new RS, scale down old RS" until reaching target numbers.
+5. State Recording
+  - Each Deployment's status (status.conditions, status.replicas, status.updatedReplicas ...) is updated and stored in etcd.
+  - This allows kubectl rollout status deployment/... to check current update progress.
+
+Summary:
+  - etcd is the single source of truth, recording all Deployment specs and update progress in etcd.
+  - Deployment Controller is the executor, responsible for Pod replacement based on "desired state" in etcd, and writing process status back to etcd. 
