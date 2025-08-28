@@ -13,6 +13,7 @@ This directory contains real-world troubleshooting experiences and debugging gui
   - [06_Terraform State Lock Recovery Guide](en/06_terraform_state_lock_recovery_guide.md)
   - [07_Terraform Provider Scope "no client config" Error](en/07_terraform_provider_scope_issue.md)
   - [08_Complete Troubleshooting Case: EKS Ingress Startup Failure](en/08_eks_ingress_startup_failed_case.md)
+  - [09_Experience Sharing: Installing Ingress Controller with Helm](en/09_install_ingress_controller.md)
 - [繁體中文](zh-tw/)
   - [01_Network ACL 對 Private Subnet 通信影響的除錯經驗](zh-tw/01_network_acl_private_subnet_troubleshooting.md)
   - [02_AWS Flow Log 無法被正確刪除的除錯經驗](zh-tw/02_aws_flow_log_could_not_be_deleted.md)
@@ -22,6 +23,7 @@ This directory contains real-world troubleshooting experiences and debugging gui
   - [06_Terraform State Lock Recovery Guide](zh-tw/06_terraform_state_lock_recovery_guide.md)
   - [07_Terraform Provider 作用域導致的 "no client config" 錯誤](zh-tw/07_terraform_provider_scope_issue.md)
   - [08_EKS Ingress 啟動失敗的完整除錯案例](zh-tw/08_eks_ingress_startup_failed_case.md)
+  - [09_使用 Helm 安裝 Ingress Controller 的經驗分享](zh-tw/09_install_ingress_controller.md)
 - [日本語](ja/)
   - [01_Network ACLがPrivate Subnet通信に与える影響のデバッグ経験](ja/01_network_acl_private_subnet_troubleshooting.md)
   - [02_AWS Flow Log が削除できない問題のトラブルシューティング](ja/02_aws_flow_log_could_not_be_deleted.md)
@@ -31,6 +33,7 @@ This directory contains real-world troubleshooting experiences and debugging gui
   - [06_Terraform State Lock復旧ガイド](ja/06_terraform_state_lock_recovery_guide.md)
   - [07_Terraform Providerスコープによる「no client config」エラー](ja/07_terraform_provider_scope_issue.md)
   - [08_EKS Ingress 起動失敗の完全なトラブルシューティング事例](ja/08_eks_ingress_startup_failed_case.md)
+  - [09_Helm を使用した Ingress Controller インストールの経験共有](ja/09_install_ingress_controller.md)
 
 ## Structure
 
