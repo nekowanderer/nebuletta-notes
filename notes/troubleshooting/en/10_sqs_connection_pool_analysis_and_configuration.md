@@ -295,6 +295,68 @@ Communication service (ECS Container)
 
 - **Remember**: The connection pool is on the application side, not on the service side. When adding queues, especially those with connection-intensive operation patterns, we must assess whether the connection pool capacity is sufficient!
 
+## A Restaurant Analogy for Non-Technical Readers
+
+You can think of the HTTP connection pool as a restaurant.
+
+### Original Situation
+
+- The restaurant originally had only 50 seats.
+- Each SQS API request is like a guest who wants to dine at the restaurant.
+- Guests must acquire a seat before they can start dining.
+- After finishing their meal, the seat is released for the next guest.
+
+### After Adding a New Queue
+
+Adding a fourth queue is like opening a new order entry point.
+
+Therefore:
+
+- More guests come to the restaurant at the same time.
+- The original 50 seats quickly fill up.
+- Later guests can only wait in the waiting area.
+- If guests wait too long and still cannot get a seat, they give up and leave.
+
+This "leaving after waiting too long" is equivalent to the system throwing:
+
+```text
+Acquire operation took longer than the configured maximum time.
+```
+
+---
+## Difference Between connectionAcquisitionTimeout and connectionTimeout
+
+These two settings are easily confused.
+
+### connectionAcquisitionTimeout
+
+Represents:
+> How long a request is willing to wait at most to acquire an available connection from the connection pool.
+
+Restaurant analogy:
+> How long a guest is willing to wait at the door for a seat.
+
+This is the stage where the error occurred in this incident.
+
+### connectionTimeout
+
+Represents:
+> After acquiring a connection resource, the maximum time allowed to wait when actually establishing a TCP/TLS connection with the remote service.
+
+Restaurant analogy:
+> After a guest has already gotten a seat, how long staff can spend at most establishing contact with the kitchen.
+
+Therefore:
+
+```text
+connectionAcquisitionTimeout = 10 seconds
+connectionTimeout = 3 seconds
+```
+
+They should not be confused with each other.
+
+---
+
 ## References
 - [Configure the Netty-based HTTP client](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/http-configuration-netty.html) 
 - [NettyNioAsyncHttpClient.Builder](https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/http/nio/netty/NettyNioAsyncHttpClient.Builder.html)

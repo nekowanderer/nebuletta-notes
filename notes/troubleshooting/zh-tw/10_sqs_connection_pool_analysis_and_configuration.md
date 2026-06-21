@@ -209,7 +209,7 @@ aws:
 
 ### QA 環境配置差異
 
-| 配置項目 | 生產環境 | QA 環境 |
+| 配置項目 | Production | QA |
 |---------|---------|---------|
 | Poller 頻率 | 1 秒 | 3 秒 |
 | Transactional batch size | 10 | 10 |
@@ -294,6 +294,68 @@ Communication service (ECS Container)
 - Production 環境要經過仔細計算後套用客製化的設定，不要直接用預設值就上。
 
 - **記住**：連線池在應用程式端，不在服務端。新增 queue 時，特別是採用連線密集型運作模式的 queue，必須評估連線池容量是否足夠！
+
+## 給非技術人員的餐廳比喻
+
+可以把 HTTP connection pool 想像成一間餐廳。
+
+### 原本的狀況
+
+- 餐廳原本只有 50 個座位。
+- 每一個 SQS API request 就像一位想進餐廳吃飯的客人。
+- 客人要先取得座位，才能開始用餐。
+- 用餐結束後，座位就會釋放，提供下一位客人使用。
+
+### 新增 Queue 後
+
+新增第四個 queue，就像多開了一個新的接單入口。
+
+因此：
+
+- 同一時間來餐廳的客人變多。
+- 原本 50 個座位很快就坐滿。
+- 後來的客人只能在候位區排隊。
+- 如果客人等待太久仍拿不到座位，就會放棄離開。
+
+這個「等待太久後離開」，就相當於系統拋出：
+
+```text
+Acquire operation took longer than the configured maximum time.
+```
+
+---
+## connectionAcquisitionTimeout 與 connectionTimeout 的差異
+
+這兩個設定很容易混淆。
+
+### connectionAcquisitionTimeout
+
+代表： 
+> 一個 request 最多願意等多久，來取得 connection pool 裡的一條可用 connection。
+
+餐廳比喻： 
+> 客人在門口最多願意等座位多久。
+
+本次錯誤就是發生在這個階段。
+
+### connectionTimeout
+
+代表：
+> 取得 connection 資源後，實際和遠端服務建立 TCP/TLS connection 時，最多允許等待多久。
+
+餐廳比喻：
+> 客人已經拿到座位後，服務人員最多花多久和廚房建立聯繫。
+
+因此：
+
+```text
+connectionAcquisitionTimeout = 10 秒
+connectionTimeout = 3 秒
+```
+
+不能混為一談。
+
+---
 
 ## 參考資料
 - [Configure the Netty-based HTTP client](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/http-configuration-netty.html) 

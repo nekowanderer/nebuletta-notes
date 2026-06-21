@@ -295,6 +295,68 @@ Communication service (ECS Container)
 
 - **覚えておくこと**：コネクションプールはアプリケーション側にあり、サービス側ではありません。queue を追加する際、特にコネクション集約型の動作パターンを持つ queue の場合、コネクションプール容量が十分かどうかを評価する必要があります！
 
+## 非技術者向けのレストランのたとえ
+
+HTTP コネクションプールをレストランに例えることができます。
+
+### 元の状況
+
+- レストランにはもともと50席しかありませんでした。
+- 各 SQS API request は、レストランで食事をしたいお客さんのような存在です。
+- お客さんは座席を取得してからでないと食事を始められません。
+- 食事が終わると、座席は解放され、次のお客さんが使えます。
+
+### Queue 追加後
+
+4つ目の queue を追加することは、新しい注文受付窓口を増設したようなものです。
+
+そのため：
+
+- 同時に来店するお客さんの数が増えます。
+- もともとの50席はすぐに埋まります。
+- 後から来たお客さんは待合エリアで列に並ぶしかありません。
+- 長時間待っても座席を得られない場合、お客さんは諦めて帰ってしまいます。
+
+この「長く待った末に諦めて帰る」ことは、システムが次のエラーを投げることに相当します：
+
+```text
+Acquire operation took longer than the configured maximum time.
+```
+
+---
+## connectionAcquisitionTimeout と connectionTimeout の違い
+
+この2つの設定は混同しやすいです。
+
+### connectionAcquisitionTimeout
+
+意味：
+> request が、connection pool 内の利用可能な connection を1つ取得するために、最大どれだけ待つかを示します。
+
+レストランのたとえ：
+> お客さんが入口で、座席が空くまで最大どれだけ待つか。
+
+今回のエラーはこの段階で発生しました。
+
+### connectionTimeout
+
+意味：
+> connection リソースを取得した後、実際にリモートサービスと TCP/TLS connection を確立する際に、最大どれだけ待てるかを示します。
+
+レストランのたとえ：
+> お客さんがすでに座席を確保した後、スタッフが厨房と連絡を取るのに最大どれだけ時間をかけられるか。
+
+したがって：
+
+```text
+connectionAcquisitionTimeout = 10 秒
+connectionTimeout = 3 秒
+```
+
+この2つを混同してはいけません。
+
+---
+
 ## 参考資料
 - [Configure the Netty-based HTTP client](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/http-configuration-netty.html) 
 - [NettyNioAsyncHttpClient.Builder](https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/http/nio/netty/NettyNioAsyncHttpClient.Builder.html)
